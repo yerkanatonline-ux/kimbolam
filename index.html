@@ -816,12 +816,13 @@ footer small{font-size:13px;font-weight:700}
 
 <script>
 /* ---------- AI КЕҢЕСШІ CONFIG ----------
-   localhost-те автоматты түрде локал Docker backend-ке (docker-compose) қосылады.
-   Деплойдан кейін тек PROD_API_BASE-ті нақты Vercel URL-іңізге ауыстыру керек. */
-const PROD_API_BASE = 'https://YOUR-DEPLOY-URL.vercel.app';
+   localhost-те автоматты түрде локал Docker/express backend-ке (:3000) қосылады.
+   Production-да frontend пен API бір ғана Vercel доменінде тұрады, сондықтан
+   API_BASE бос жол ('') — '/api/chat' сол доменге салыстырмалы шақырылады.
+   Ешқандай деплой URL-ін қолмен жазудың қажеті жоқ. */
 const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
   ? 'http://localhost:3000'
-  : PROD_API_BASE;
+  : '';
 const AI_API_URL = API_BASE + '/api/chat';
 const SAVE_RESULT_URL = API_BASE + '/api/save-result';
 
