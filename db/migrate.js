@@ -33,11 +33,15 @@ alter table test_results enable row level security;
 `;
 
 async function runMigration() {
-  const connectionString =
+  const raw =
     process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
-  if (!connectionString) {
+  if (!raw) {
     throw new Error('POSTGRES_URL_NON_POOLING да, POSTGRES_URL да табылмады');
   }
+  // sslmode параметрін алып тастаймыз — әйтпесе pg оны алдымен қолданып,
+  // біздің ssl объектімізді (rejectUnauthorized:false) елемей, Supabase-тың
+  // self-signed сертификатына сүрінеді.
+  const connectionString = raw.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
   const client = new Client({
     connectionString,
     ssl: { rejectUnauthorized: false },
