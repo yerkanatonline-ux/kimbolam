@@ -2,10 +2,13 @@
 // Интерфейсі ./sqlite.js-пен бірдей — api/*.js файлдары айырмашылықты білмейді.
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
-);
+// Vercel-дың Supabase интеграциясы айнымалыларды NEXT_PUBLIC_ префиксімен қосады
+// (NEXT_PUBLIC_SUPABASE_URL), ал қолмен қосқанда SUPABASE_URL болуы мүмкін —
+// екеуін де қабылдаймыз. Кілт үшін де солай (SERVICE_ROLE_KEY / SECRET_KEY).
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function rowToObj(row) {
   if (!row) return null;
