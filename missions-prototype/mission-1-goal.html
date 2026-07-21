@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кім болам? — Миссия: Мақсат қою (прототип)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#2A1B54; --cream:#FFF9EE; --cream-2:#F3EEFF; --ink:#211545; --muted:#6b6480;
+    --violet:#7B5CFF; --violet-dk:#4E36C4; --violet-soft:#EFEAFF;
+    --green:#22C55E; --green-dk:#178A3F; --green-soft:#DEFAEA;
+    --yellow:#FFC72C; --yellow-dk:#B8860B; --yellow-soft:#FFF3D2;
+    --pink:#FF4D8D; --blue:#29B6F6; --line:#E6E0F5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+  .proto-tag{position:fixed;top:14px;left:14px;font-size:11px;font-weight:800;background:var(--night);color:rgba(255,255,255,.8);
+    padding:6px 13px;border-radius:99px;z-index:99}
+
+  /* TOP PROGRESS — 5-level journey context */
+  .journey{background:var(--night);padding:60px 20px 26px;text-align:center}
+  .journey-track{display:flex;gap:8px;justify-content:center;max-width:420px;margin:0 auto 14px}
+  .jstep{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.15)}
+  .jstep.done{background:var(--green)}
+  .jstep.active{background:var(--yellow)}
+  .journey h1{color:#fff;font-size:20px;font-weight:900}
+  .journey p{color:rgba(255,255,255,.6);font-size:12.5px;font-weight:700;margin-top:4px}
+
+  .stage{max-width:600px;margin:0 auto;padding:30px 22px 60px}
+
+  /* ===== STAGE A: intro ===== */
+  #introStage{text-align:center}
+  .robot-mini{width:96px;height:82px;margin:0 auto 22px;position:relative;animation:float 3s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  .robot-mini .antenna{width:5px;height:18px;background:#C9C2FF;margin:0 auto;border-radius:3px;position:relative}
+  .robot-mini .antenna::after{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:12px;height:12px;border-radius:50%;background:var(--yellow)}
+  .robot-mini .head{width:88px;height:72px;background:var(--violet);border-radius:24px;margin:4px auto 0;box-shadow:0 7px 0 var(--violet-dk);
+    display:flex;align-items:center;justify-content:center;gap:14px}
+  .robot-mini .eye{width:13px;height:13px;background:#fff;border-radius:50%}
+
+  .mission-card{background:#fff;border-radius:24px;padding:36px 30px;box-shadow:0 8px 0 var(--line)}
+  .mission-badge{display:inline-block;font-size:12px;font-weight:900;color:var(--violet-dk);background:var(--violet-soft);
+    padding:7px 16px;border-radius:99px;margin-bottom:18px}
+  .mission-card h2{font-size:24px;font-weight:900;margin-bottom:12px}
+  .mission-card p.mdesc{color:var(--muted);font-weight:700;font-size:14.5px;line-height:1.6;margin-bottom:24px}
+  .mission-meta{display:flex;gap:12px;justify-content:center;margin-bottom:26px;flex-wrap:wrap}
+  .meta-pill{background:var(--cream-2);border-radius:12px;padding:10px 16px;font-size:12.5px;font-weight:800;color:var(--ink)}
+  .big-btn{font-family:'Nunito';font-weight:900;font-size:16.5px;color:#fff;background:var(--green);
+    border:none;border-radius:16px;padding:17px 36px;cursor:pointer;box-shadow:0 6px 0 var(--green-dk);transition:transform .08s}
+  .big-btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--green-dk)}
+
+  /* ===== STAGE B: chat ===== */
+  #chatStage{display:none}
+  .chat-panel{background:#fff;border-radius:22px;box-shadow:0 8px 0 var(--line);display:flex;flex-direction:column;height:480px;overflow:hidden}
+  .chat-head{padding:16px 20px;border-bottom:2px solid var(--cream-2);display:flex;align-items:center;gap:10px}
+  .chat-head .rdot{width:34px;height:34px;border-radius:11px;background:var(--violet);display:flex;align-items:center;justify-content:center;font-size:16px}
+  .chat-head b{font-size:14.5px;font-weight:900}
+  .chat-head span{font-size:11.5px;color:var(--muted);font-weight:700;display:block}
+  .chat-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:85%;padding:12px 16px;border-radius:16px;font-size:14px;font-weight:700;line-height:1.5;white-space:pre-wrap}
+  .msg.bot{align-self:flex-start;background:var(--cream-2);border-bottom-left-radius:4px}
+  .msg.user{align-self:flex-end;background:var(--violet);color:#fff;border-bottom-right-radius:4px}
+  .msg.typing{align-self:flex-start;background:var(--cream-2);color:var(--muted);font-style:italic}
+  .chat-foot{padding:14px;border-top:2px solid var(--cream-2);display:flex;gap:8px}
+  .chat-foot textarea{flex:1;resize:none;border:none;background:var(--cream-2);border-radius:12px;padding:12px 14px;
+    font-family:'Nunito';font-weight:700;font-size:14px;height:46px}
+  .chat-foot textarea:focus{outline:none}
+  .send-btn{background:var(--violet);border:none;border-radius:12px;width:46px;height:46px;color:#fff;font-size:17px;
+    cursor:pointer;box-shadow:0 4px 0 var(--violet-dk);transition:transform .08s}
+  .send-btn:active{transform:translateY(4px);box-shadow:none}
+  .next-stage-btn{display:block;margin:20px auto 0;font-family:'Nunito';font-weight:900;font-size:14.5px;
+    color:var(--night);background:var(--yellow);border:none;border-radius:14px;padding:14px 26px;cursor:pointer;
+    box-shadow:0 5px 0 var(--yellow-dk);transition:transform .08s}
+  .next-stage-btn:active{transform:translateY(4px);box-shadow:0 0 0 var(--yellow-dk)}
+
+  /* ===== STAGE C: goal card form ===== */
+  #goalFormStage{display:none}
+  .goal-form{background:#fff;border-radius:22px;padding:30px;box-shadow:0 8px 0 var(--line)}
+  .goal-form h2{font-size:20px;font-weight:900;margin-bottom:6px}
+  .goal-form p.hint{color:var(--muted);font-weight:700;font-size:13.5px;margin-bottom:22px}
+  .gf-field{margin-bottom:16px}
+  .gf-field label{display:block;font-size:12.5px;font-weight:900;color:var(--violet-dk);margin-bottom:6px}
+  .gf-field input,.gf-field textarea{width:100%;font-family:'Nunito';font-weight:700;font-size:14.5px;
+    padding:13px 15px;border:none;border-radius:12px;background:var(--cream-2)}
+  .gf-field textarea{resize:none;height:64px}
+  .gf-field input:focus,.gf-field textarea:focus{outline:2px solid var(--violet-soft)}
+
+  /* ===== STAGE D: completion ===== */
+  #doneStage{display:none;text-align:center}
+  .badge-unlock{width:140px;height:140px;margin:0 auto 24px;position:relative}
+  .badge-circle{width:140px;height:140px;border-radius:50%;background:linear-gradient(145deg,var(--yellow),#FFB020);
+    display:flex;align-items:center;justify-content:center;font-size:60px;box-shadow:0 10px 0 var(--yellow-dk);
+    animation:pop-in .5s cubic-bezier(.2,.9,.3,1.3)}
+  @keyframes pop-in{from{transform:scale(0) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+  .confetti-dot{position:absolute;width:10px;height:10px;border-radius:50%;animation:burst .8s ease-out forwards}
+  @keyframes burst{from{transform:translate(0,0) scale(1);opacity:1}to{transform:var(--tx) scale(.3);opacity:0}}
+  #doneStage h2{font-size:26px;font-weight:900;margin-bottom:10px}
+  #doneStage p{color:var(--muted);font-weight:700;font-size:15px;margin-bottom:26px}
+  .goal-summary{background:var(--violet-soft);border-left:6px solid var(--violet);border-radius:16px;padding:22px 24px;
+    text-align:left;margin-bottom:26px}
+  .goal-summary b{display:block;font-size:12px;color:var(--violet-dk);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+  .goal-summary p{color:var(--ink);font-weight:800;font-size:15.5px;margin-bottom:14px}
+  .goal-summary p:last-child{margin-bottom:0}
+  .xp-row{display:flex;gap:12px;justify-content:center;margin-bottom:26px;flex-wrap:wrap}
+  .xp-pill{background:var(--green-soft);color:var(--green-dk);font-weight:900;font-size:13px;padding:9px 16px;border-radius:99px}
+</style>
+</head>
+<body>
+
+<div class="proto-tag">🧪 Бөлек прототип · IDP миссиясы · платформаға әлі қосылмаған</div>
+
+<div class="journey">
+  <div class="journey-track">
+    <div class="jstep done"></div>
+    <div class="jstep active"></div>
+    <div class="jstep"></div>
+    <div class="jstep"></div>
+    <div class="jstep"></div>
+  </div>
+  <h1>Деңгей 2: Мақсат қою</h1>
+  <p>Тану → <b style="color:#FFE9A8">Мақсат қою</b> → Жоспарлау → Әрекет ету → Бағалау</p>
+</div>
+
+<div class="stage">
+
+  <!-- STAGE A -->
+  <div id="introStage">
+    <div class="robot-mini">
+      <div class="antenna"></div>
+      <div class="head"><span class="eye"></span><span class="eye"></span></div>
+    </div>
+    <div class="mission-card">
+      <div class="mission-badge">🎯 МИССИЯ 1</div>
+      <h2>Нақты мақсат қой</h2>
+      <p class="mdesc">Дерексіз армандар («жақсы оқығым келеді») ешқашан орындалмайды. Мен саған 3 айда жетуге болатын нақты, өлшенетін мақсат тұжырымдауға көмектесемін.</p>
+      <div class="mission-meta">
+        <span class="meta-pill">⏱ ~8 минут</span>
+        <span class="meta-pill">🏆 Бейдж: Мақсатшы</span>
+        <span class="meta-pill">💬 AI серігіңмен диалог</span>
+      </div>
+      <button class="big-btn" onclick="startMission()">Миссияны бастау 🚀</button>
+    </div>
+  </div>
+
+  <!-- STAGE B -->
+  <div id="chatStage">
+    <div class="chat-panel">
+      <div class="chat-head">
+        <span class="rdot">🤖</span>
+        <div><b>AI серігің</b><span>Мақсатыңды бірге нақтылайық</span></div>
+      </div>
+      <div class="chat-body" id="chatBody"></div>
+      <div class="chat-foot">
+        <textarea id="chatInput" placeholder="Жауабыңды жаз..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+        <button class="send-btn" onclick="sendChat()">➤</button>
+      </div>
+    </div>
+    <button class="next-stage-btn" onclick="goToGoalForm()">Дайынмын, мақсатымды жазамын →</button>
+  </div>
+
+  <!-- STAGE C -->
+  <div id="goalFormStage">
+    <div class="goal-form">
+      <h2>🎯 Мақсатыңды түйіндеп жаз</h2>
+      <p class="hint">Роботпен сөйлескенде шыққан ойларыңды осы жерге нақты тұжырымда.</p>
+      <div class="gf-field"><label>Мақсатым</label><textarea id="gGoal" placeholder="мыс. Психология саласында 1 нақты жоба/тәжірибе жасаймын"></textarea></div>
+      <div class="gf-field"><label>Мерзімі</label><input id="gDeadline" placeholder="мыс. 3 айдан кейін, 15 қазанға дейін"></div>
+      <div class="gf-field"><label>Қалай өлшеймін</label><input id="gMeasure" placeholder="мыс. Дайын жоба/сертификат/нәтиже болады"></div>
+      <div class="gf-field"><label>Неге бұл маған маңызды</label><textarea id="gWhy" placeholder="мыс. Бұл мені қызықтыратын салаға жақындатады"></textarea></div>
+      <button class="big-btn" style="width:100%" onclick="completeMission()">Мақсатты бекіту ✓</button>
+    </div>
+  </div>
+
+  <!-- STAGE D -->
+  <div id="doneStage">
+    <div class="badge-unlock" id="badgeUnlock">
+      <div class="badge-circle">🏆</div>
+    </div>
+    <h2>Бейдж алдың: «Мақсатшы»!</h2>
+    <p>Деңгей 2 аяқталды. Деңгей 3 (Жоспарлау) ашылды.</p>
+    <div class="goal-summary" id="goalSummary"></div>
+    <div class="xp-row">
+      <span class="xp-pill">✦ +50 XP</span>
+      <span class="xp-pill">🔥 1 күндік серия басталды</span>
+    </div>
+    <button class="big-btn" onclick="alert('Мұнда Деңгей 3: Жоспарлау миссиясы ашылады')">Келесі миссияға өту →</button>
+  </div>
+
+</div>
+
+<script>
+const PROD_API_BASE = 'https://YOUR-DEPLOY-URL.vercel.app';
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3000'
+  : PROD_API_BASE;
+const AI_API_URL = API_BASE + '/api/goal-mission';
+
+// Прототип үшін тест профилі қолмен қойылды
+const profile = { hollandCode:'ISA', hollandNames:'Аналитик, Көмекші, Креатор', mbtiType:'INFP', topSpecialties:['B041','B001'] };
+let messages = [];
+let busy = false;
+
+function appendMsg(role, text){
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+
+function startMission(){
+  document.getElementById('introStage').style.display = 'none';
+  document.getElementById('chatStage').style.display = 'block';
+  appendMsg('bot', 'Сәлем! Тест нәтижең бойынша сен Психология мен Педагогикаға бейімсің. Осы бағытта 3 айдан кейін нені жеткізгің келеді? Ойыңа алғаш келгенді жаз — дерексіз болса да мейлі, бірге нақтылаймыз.');
+}
+
+async function callAI(){
+  if(busy) return;
+  busy = true;
+  const typing = appendMsg('bot typing', 'Ойланып жатыр...');
+  try{
+    const res = await fetch(AI_API_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ profile, messages })
+    });
+    const data = await res.json();
+    typing.remove();
+    if(!res.ok || !data.reply){
+      appendMsg('bot', data.error || 'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін (бұл прототип).');
+    } else {
+      appendMsg('bot', data.reply);
+      messages.push({role:'assistant', content:data.reply});
+    }
+  } catch(e){
+    typing.remove();
+    appendMsg('bot', 'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін (бұл прототип). Дегенмен төмендегі батырма арқылы жалғастыра аласың.');
+  }
+  busy = false;
+}
+
+function sendChat(){
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  appendMsg('user', text);
+  messages.push({role:'user', content:text});
+  callAI();
+}
+
+function goToGoalForm(){
+  document.getElementById('chatStage').style.display = 'none';
+  document.getElementById('goalFormStage').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function completeMission(){
+  const goal = document.getElementById('gGoal').value.trim();
+  const deadline = document.getElementById('gDeadline').value.trim();
+  const measure = document.getElementById('gMeasure').value.trim();
+  const why = document.getElementById('gWhy').value.trim();
+  if(!goal || !deadline){ alert('Мақсат пен мерзімді толтыр'); return; }
+
+  document.getElementById('goalFormStage').style.display = 'none';
+  const done = document.getElementById('doneStage');
+  done.style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  document.getElementById('goalSummary').innerHTML =
+    '<b>Мақсат</b><p>'+goal+'</p>'+
+    '<b>Мерзімі</b><p>'+deadline+'</p>'+
+    (measure?'<b>Өлшемі</b><p>'+measure+'</p>':'')+
+    (why?'<b>Неге маңызды</b><p>'+why+'</p>':'');
+
+  // конфетти анимациясы
+  const wrap = document.getElementById('badgeUnlock');
+  const colors = ['#7B5CFF','#22C55E','#FFC72C','#FF4D8D','#29B6F6'];
+  for(let i=0;i<16;i++){
+    const dot = document.createElement('div');
+    dot.className = 'confetti-dot';
+    const angle = (Math.PI*2*i)/16;
+    const dist = 70 + Math.random()*40;
+    dot.style.setProperty('--tx', `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`);
+    dot.style.background = colors[i % colors.length];
+    dot.style.left = '65px'; dot.style.top = '65px';
+    wrap.appendChild(dot);
+  }
+
+  // Нағыз платформада мұнда save-result / жаңа goals кестесіне жазу шақырылады
+  console.log('IDP мақсаты сақталар еді:', {goal, deadline, measure, why, profile});
+}
+</script>
+</body>
+</html>

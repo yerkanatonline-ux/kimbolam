@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кім болам? — дерекқор тексеру (прототип)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#2A1B54; --cream:#FFF9EE; --cream-2:#F3EEFF; --ink:#211545; --muted:#6b6480;
+    --violet:#7B5CFF; --violet-dk:#4E36C4; --green:#22C55E; --green-dk:#178A3F;
+    --yellow:#FFC72C; --yellow-dk:#B8860B; --line:#E6E0F5; --pink:#FF4D8D;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);padding:30px 20px}
+  .proto-tag{position:fixed;top:14px;left:14px;font-size:11.5px;font-weight:800;background:var(--night);color:rgba(255,255,255,.8);
+    padding:7px 14px;border-radius:99px;z-index:99}
+  h1{text-align:center;font-weight:900;font-size:26px;margin:36px 0 6px}
+  .sub{text-align:center;color:var(--muted);font-weight:700;font-size:14px;margin-bottom:34px}
+  .wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+  .card{background:#fff;border-radius:20px;padding:26px;box-shadow:0 6px 0 var(--line)}
+  .card h2{font-size:17px;font-weight:900;margin-bottom:4px;display:flex;align-items:center;gap:9px}
+  .card .step-n{width:26px;height:26px;border-radius:8px;background:var(--violet);color:#fff;font-size:13px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .card p.desc{font-size:13px;color:var(--muted);font-weight:700;margin:6px 0 16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  input,select{width:100%;font-family:'Nunito';font-weight:700;font-size:14px;padding:11px 13px;
+    border:none;border-radius:11px;background:var(--cream-2)}
+  input:focus,select:focus{outline:2px solid var(--violet)}
+  .btn{font-family:'Nunito';font-weight:900;font-size:13.5px;border:none;border-radius:12px;padding:12px 20px;
+    cursor:pointer;transition:transform .08s;box-shadow:0 4px 0 rgba(0,0,0,.15);margin-top:6px}
+  .btn:active{transform:translateY(4px);box-shadow:none}
+  .btn-violet{background:var(--violet);color:#fff}
+  .btn-green{background:var(--green);color:#fff}
+  .btn-yellow{background:var(--yellow);color:var(--night)}
+  .result-box{margin-top:14px;background:var(--cream-2);border-radius:12px;padding:14px 16px;font-size:12.5px;
+    font-family:monospace;white-space:pre-wrap;color:var(--ink);max-height:220px;overflow-y:auto;display:none}
+  .result-box.show{display:block}
+  .result-box.err{background:#FDE1EC;color:#C22163}
+  .code-display{font-size:28px;font-weight:900;color:var(--violet-dk);letter-spacing:.1em;text-align:center;
+    background:var(--cream-2);border-radius:12px;padding:16px;margin-top:14px;display:none}
+  .code-display.show{display:block}
+  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{font-weight:900;color:var(--muted);font-size:11.5px;text-transform:uppercase}
+</style>
+</head>
+<body>
+
+<div class="proto-tag">🧪 Бөлек прототип · дерекқор тексеру · платформаға әлі қосылмаған</div>
+
+<h1>🗄️ Дерекқор тексеру беті</h1>
+<p class="sub">Үш backend endpoint-ті осы жерде сынаймыз — платформаға тимей тұрып</p>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2><span class="step-n">1</span> Сынып жасау</h2>
+    <p class="desc">Мұғалім/сіз алдын ала сынып жасайсыз — код шығады, оқушыларға таратасыз.</p>
+    <div class="row">
+      <input id="schoolName" placeholder="Мектеп аты (мыс. №5 мектеп)">
+      <input id="className" placeholder="Сынып (мыс. 9 «Ә»)">
+    </div>
+    <button class="btn btn-violet" onclick="createClass()">Сынып жасау</button>
+    <div class="code-display" id="codeDisplay"></div>
+    <div class="result-box" id="createLog"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-n">2</span> Тест нәтижесін сақтау</h2>
+    <p class="desc">Оқушы тестті аяқтағанда осы шақырылады. Сынып коды бос болса — «жеке» ретінде сақталады.</p>
+    <div class="row">
+      <input id="studentName" placeholder="Оқушы аты-жөні" value="Тест Тестов">
+      <input id="classCodeInput" placeholder="Сынып коды (міндетті емес)">
+    </div>
+    <button class="btn btn-green" onclick="saveResult()">Үлгі нәтижені сақтау (кездейсоқ дерекпен)</button>
+    <div class="result-box" id="saveLog"></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="step-n">3</span> Сынып нәтижелерін көру</h2>
+    <p class="desc">Мұғалім өзінің құпия кодын енгізіп (оқушы коды емес!), сол сыныптың барлық нәтижесін көреді.</p>
+    <div class="row">
+      <input id="viewCode" placeholder="Мұғалім коды (T-XXXX-XXXX)">
+    </div>
+    <button class="btn btn-yellow" onclick="viewClass()">Нәтижелерді көрсету</button>
+    <div class="result-box" id="viewLog"></div>
+    <table id="resultsTable" style="display:none">
+      <thead><tr><th>Аты</th><th>Holland</th><th>MBTI</th><th>Сенім</th><th>Уақыт</th></tr></thead>
+      <tbody id="resultsBody"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+// Деплойдан кейін тек PROD_API_BASE-ті нақты Vercel URL-іңізге ауыстырыңыз
+const PROD_API_BASE = 'https://YOUR-DEPLOY-URL.vercel.app';
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3000'
+  : PROD_API_BASE;
+const CREATE_CLASS_URL = API_BASE + '/api/create-class';
+const SAVE_RESULT_URL = API_BASE + '/api/save-result';
+const GET_CLASS_URL = API_BASE + '/api/get-class-results';
+
+function showLog(id, obj, isErr){
+  const el = document.getElementById(id);
+  el.textContent = JSON.stringify(obj, null, 2);
+  el.className = 'result-box show' + (isErr ? ' err' : '');
+}
+
+async function createClass(){
+  const schoolName = document.getElementById('schoolName').value;
+  const className = document.getElementById('className').value;
+  if(!className){ showLog('createLog', {error:'Сынып атын жазыңыз'}, true); return; }
+  try{
+    const res = await fetch(CREATE_CLASS_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ schoolName, className })
+    });
+    const data = await res.json();
+    showLog('createLog', data, !res.ok);
+    if(res.ok){
+      const cd = document.getElementById('codeDisplay');
+      cd.innerHTML = 'Оқушы коды: ' + data.code +
+        '<div style="font-size:13px;margin-top:8px;color:var(--pink);font-weight:800">🔒 Мұғалім коды (құпия, оқушыға берме!): ' + data.teacherCode + '</div>';
+      cd.classList.add('show');
+      document.getElementById('classCodeInput').value = data.code;
+      document.getElementById('viewCode').value = data.teacherCode;
+    }
+  }catch(e){
+    showLog('createLog', {error:'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін', detail:e.message}, true);
+  }
+}
+
+function sampleScores(){
+  const codes=['R','I','A','S','E','C'];
+  const scores={};
+  codes.forEach(c=>scores[c]=Math.floor(Math.random()*100));
+  const sorted=codes.sort((a,b)=>scores[b]-scores[a]);
+  return {
+    hollandCode: sorted.slice(0,3).join(''),
+    hollandScores: scores,
+    klimovTop: ['Адам','Таңба'],
+    mbtiType: ['INFP','ENTJ','ISTJ','ESFP'][Math.floor(Math.random()*4)],
+    confidence: ['Жоғары','Орташа','Ізденіс керек'][Math.floor(Math.random()*3)],
+    matchedSpecialties: [{code:'B041',n:'Психология',pct:97},{code:'B001',n:'Педагогика және психология',pct:94}]
+  };
+}
+
+async function saveResult(){
+  const studentName = document.getElementById('studentName').value;
+  const classCode = document.getElementById('classCodeInput').value;
+  const sample = sampleScores();
+  try{
+    const res = await fetch(SAVE_RESULT_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ studentName, classCode, ...sample })
+    });
+    const data = await res.json();
+    showLog('saveLog', {...data, sentSample: sample}, !res.ok);
+  }catch(e){
+    showLog('saveLog', {error:'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін', detail:e.message}, true);
+  }
+}
+
+async function viewClass(){
+  const teacherCode = document.getElementById('viewCode').value;
+  if(!teacherCode){ showLog('viewLog', {error:'Мұғалім кодын жазыңыз'}, true); return; }
+  try{
+    const res = await fetch(GET_CLASS_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ teacherCode })
+    });
+    const data = await res.json();
+    showLog('viewLog', data, !res.ok);
+    if(res.ok && data.results){
+      const tbody = document.getElementById('resultsBody');
+      tbody.innerHTML = data.results.map(r =>
+        `<tr><td>${r.student_name}</td><td>${r.holland_code||'—'}</td><td>${r.mbti_type||'—'}</td><td>${r.confidence||'—'}</td><td>${new Date(r.created_at).toLocaleString('kk-KZ')}</td></tr>`
+      ).join('');
+      document.getElementById('resultsTable').style.display = data.results.length ? 'table' : 'none';
+    }
+  }catch(e){
+    showLog('viewLog', {error:'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін', detail:e.message}, true);
+  }
+}
+</script>
+</body>
+</html>

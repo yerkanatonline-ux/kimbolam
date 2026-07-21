@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/chat.js": { "maxDuration": 20 },
+    "api/essay-coach.js": { "maxDuration": 20 },
+    "api/goal-mission.js": { "maxDuration": 20 }
+  }
+}

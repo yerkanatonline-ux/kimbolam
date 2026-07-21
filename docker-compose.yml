@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - backend_node_modules:/app/node_modules
+    command: ["node", "--watch", "server.js"]
+
+  # Статикалық фронтенд — kimbolam.html және прототиптерді http://localhost:8080
+  # арқылы ашу үшін (file:// емес, шынайы origin — CORS дұрыс жұмыс істеуі үшін).
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+
+volumes:
+  backend_node_modules:

@@ -1,0 +1,18 @@
+{
+  "name": "kim-bolam-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "«Кім болам?» AI кеңесшісі, эссе көмекшісі және дерекқор backend-і (Vercel serverless functions)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "local": "node --watch server.js",
+    "vercel-dev": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

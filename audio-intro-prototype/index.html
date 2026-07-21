@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кім болам? — дауыстық кіріспе (прототип)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#2A1B54; --cream:#FFF9EE; --cream-2:#F3EEFF; --ink:#211545; --muted:#6b6480;
+    --violet:#7B5CFF; --violet-dk:#4E36C4; --violet-soft:#EFEAFF;
+    --green:#22C55E; --green-dk:#178A3F;
+    --yellow:#FFC72C; --yellow-dk:#B8860B;
+    --pink:#FF4D8D; --blue:#29B6F6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:var(--night);color:#fff;min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;overflow-x:hidden}
+  .proto-tag{position:fixed;top:18px;left:18px;font-size:12px;font-weight:800;background:rgba(255,255,255,.1);
+    padding:8px 14px;border-radius:99px;color:rgba(255,255,255,.7)}
+  .voice-status{position:fixed;top:18px;right:18px;font-size:11.5px;font-weight:800;padding:8px 14px;border-radius:99px;max-width:280px;text-align:right}
+  .voice-status.ok{background:rgba(34,197,94,.18);color:#7CE8A4}
+  .voice-status.warn{background:rgba(255,199,44,.18);color:var(--yellow)}
+
+  .stage{max-width:560px;width:100%;text-align:center}
+
+  /* ROBOT */
+  .robot-wrap{position:relative;height:190px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}
+  .robot{position:relative;animation:float 3.2s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .antenna{width:6px;height:26px;background:#C9C2FF;margin:0 auto;border-radius:4px;position:relative}
+  .antenna::after{content:'';position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:16px;height:16px;
+    border-radius:50%;background:var(--yellow);box-shadow:0 0 0 0 rgba(255,199,44,.6);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,199,44,.55)}70%{box-shadow:0 0 0 14px rgba(255,199,44,0)}100%{box-shadow:0 0 0 0 rgba(255,199,44,0)}}
+  .head{width:132px;height:112px;background:var(--violet);border-radius:34px;margin:6px auto 0;
+    box-shadow:0 10px 0 var(--violet-dk);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  .eyes{display:flex;gap:20px}
+  .eye{width:20px;height:20px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .eye::after{content:'';width:9px;height:9px;background:var(--night);border-radius:50%}
+  .eye.blink{animation:blink 4s infinite}
+  @keyframes blink{0%,96%,100%{transform:scaleY(1)}98%{transform:scaleY(.15)}}
+  .mouth{display:flex;gap:4px;align-items:flex-end;height:16px}
+  .mouth i{width:5px;background:var(--yellow);border-radius:3px;height:5px;transition:height .1s}
+  .robot.talking .mouth i:nth-child(1){animation:bar1 .5s infinite}
+  .robot.talking .mouth i:nth-child(2){animation:bar2 .45s infinite}
+  .robot.talking .mouth i:nth-child(3){animation:bar3 .55s infinite}
+  .robot.talking .mouth i:nth-child(4){animation:bar1 .4s infinite}
+  @keyframes bar1{0%,100%{height:5px}50%{height:15px}}
+  @keyframes bar2{0%,100%{height:8px}50%{height:4px}}
+  @keyframes bar3{0%,100%{height:6px}50%{height:16px}}
+  .body{width:98px;height:44px;background:var(--violet-soft);opacity:.16;border-radius:0 0 24px 24px;margin:0 auto}
+
+  /* SPEECH BUBBLE */
+  .bubble{background:#fff;color:var(--ink);border-radius:22px;padding:26px 28px;min-height:96px;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 8px 0 rgba(0,0,0,.18);margin:18px 0 24px;position:relative}
+  .bubble::before{content:'';position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+    border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:14px solid #fff}
+  #caption{font-size:19px;font-weight:800;line-height:1.45}
+
+  /* DOTS */
+  .dots{display:flex;gap:7px;justify-content:center;margin-bottom:30px;flex-wrap:wrap}
+  .dots span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.2);transition:.2s}
+  .dots span.done{background:var(--green)}
+  .dots span.now{background:var(--yellow);transform:scale(1.4)}
+
+  /* CONTROLS */
+  .controls{display:flex;gap:12px;justify-content:center;margin-bottom:34px;flex-wrap:wrap}
+  .ctrl-btn{font-family:'Nunito';font-weight:900;font-size:14.5px;border:none;border-radius:14px;
+    padding:14px 22px;cursor:pointer;transition:transform .08s,box-shadow .08s}
+  .ctrl-btn:active{transform:translateY(4px)}
+  .ctrl-primary{background:var(--violet);color:#fff;box-shadow:0 5px 0 var(--violet-dk)}
+  .ctrl-primary:active{box-shadow:0 0 0 var(--violet-dk)}
+  .ctrl-ghost{background:rgba(255,255,255,.08);color:#fff;box-shadow:0 5px 0 rgba(255,255,255,.1)}
+  .ctrl-ghost:active{box-shadow:0 0 0 rgba(255,255,255,.1)}
+
+  #startTestBtn{
+    font-family:'Nunito';font-weight:900;font-size:17px;color:var(--night);background:var(--yellow);
+    border:none;border-radius:18px;padding:19px 38px;box-shadow:0 6px 0 var(--yellow-dk);cursor:pointer;
+    transition:.25s;
+  }
+  #startTestBtn.disabled{opacity:.35;pointer-events:none;filter:grayscale(.4)}
+  #startTestBtn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--yellow-dk)}
+  .skip-note{margin-top:16px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.45)}
+  .skip-note span{text-decoration:underline;cursor:pointer;color:rgba(255,255,255,.7)}
+
+  .dbg-panel{margin-top:40px;background:rgba(255,255,255,.06);border-radius:16px;padding:18px 20px;text-align:left}
+  .dbg-title{font-size:12.5px;font-weight:900;color:rgba(255,255,255,.6);margin-bottom:10px}
+  .dbg-log{font-family:monospace;font-size:11.5px;color:#9CFFB0;max-height:140px;overflow-y:auto;
+    display:flex;flex-direction:column;gap:3px;background:rgba(0,0,0,.25);border-radius:10px;padding:10px}
+</style>
+</head>
+<body>
+
+<div class="proto-tag">🧪 Бөлек прототип · платформаға әлі қосылмаған</div>
+<div class="voice-status" id="voiceStatus">Дауыс тексерілуде...</div>
+
+<div class="stage">
+  <div class="robot-wrap">
+    <div class="robot" id="robot">
+      <div class="antenna"></div>
+      <div class="head">
+        <div class="eyes"><span class="eye blink"></span><span class="eye blink"></span></div>
+        <div class="mouth"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="body"></div>
+    </div>
+  </div>
+
+  <div class="bubble"><p id="caption">Сәлем! Тестті бастауға дайынсың ба?</p></div>
+
+  <div class="dots" id="dots"></div>
+
+  <div class="controls">
+    <button class="ctrl-btn ctrl-primary" id="playBtn" onclick="togglePlay()">▶ Тыңдау</button>
+    <button class="ctrl-btn ctrl-ghost" onclick="replay()">↺ Қайталау</button>
+    <button class="ctrl-btn ctrl-ghost" onclick="skip()">Өткізу →</button>
+  </div>
+
+  <button id="startTestBtn" class="disabled" onclick="alert('Бұл жерден нағыз тест платформасына өтеді')">Тестті бастау 🚀</button>
+  <div class="skip-note">Тыңдамай-ақ бастағың келсе — <span onclick="skip()">осы жерді бас</span></div>
+
+  <div class="dbg-panel">
+    <div class="dbg-title">🔧 Диагностика (дыбысты тексеру үшін)</div>
+    <div id="dbgLog" class="dbg-log"></div>
+    <button class="ctrl-btn ctrl-ghost" style="margin-top:10px;font-size:12px;padding:9px 16px" onclick="testBeep()">🔊 Браузер дыбысын тексеру (гудок)</button>
+  </div>
+</div>
+
+<script>
+const SCRIPT = [
+  "Сәлем! Мен сенің көмекшіңмін.",
+  "Қазір «Кім болам?» тестін бастамақсың.",
+  "Алдымен бірнеше маңызды ереже айтайын.",
+  "Бұл жерде дұрыс немесе бұрыс жауап жоқ.",
+  "Әр сұраққа өзіңе қаншалық шын келетінін ойлан.",
+  "Басқаларға ұнау үшін емес, өзің үшін жауап бер.",
+  "Тест үш бөлімнен тұрады: қызығушылық, бейімділік, мінез.",
+  "Барлығы 72 сұрақ, шамамен 15 минут кетеді.",
+  "Асықпа — әр сұраққа мұқият қара.",
+  "Соңында саған сай 117 мамандықтың ішінен ең жақынын табамыз.",
+  "Нәтиже — үкім емес, өзіңді тануға көмекші құрал.",
+  "Дайын болсаң, бастайық!"
+];
+
+/* generate-audio.js осы қалтаға intro-01.mp3...intro-12.mp3 жазады.
+   Дайын файлдар табылса, солар ойнатылады (ЕҢ ЖАҚСЫ САПА — Azure kk-KZ-DauletNeural).
+   Табылмаса — браузердің өз дауысына (kk→ru), ол да болмаса субтитр таймеріне түседі. */
+const AUDIO_BASE_PATH = 'audio/';
+
+let speechVoice = null;
+let idx = 0;
+let playing = false;
+let timer = null;
+let staticAudioMode = null; // null=әлі тексерілмеген, true/false=анықталды
+const audioEl = new Audio();
+
+const dotsEl = document.getElementById('dots');
+SCRIPT.forEach(()=>{ const s=document.createElement('span'); dotsEl.appendChild(s); });
+
+function updateDots(activeIdx){
+  [...dotsEl.children].forEach((d,i)=>{
+    d.className = i<activeIdx ? 'done' : (i===activeIdx ? 'now' : '');
+  });
+}
+
+function loadVoices(){
+  const voices = speechSynthesis.getVoices();
+  const kk = voices.find(v => v.lang.toLowerCase().startsWith('kk'));
+  const ru = voices.find(v => v.lang.toLowerCase().startsWith('ru'));
+  speechVoice = kk || ru || null;
+}
+if('speechSynthesis' in window){
+  speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
+function setVoiceStatus(text, ok){
+  const el = document.getElementById('voiceStatus');
+  el.textContent = text;
+  el.className = 'voice-status ' + (ok ? 'ok' : 'warn');
+}
+
+/* Chrome-тың белгілі бір багы: 15 секундтан кейін speechSynthesis өзінен өзі
+   "тоқтап" қалады. Соны алдын алу үшін әрбір 4 секунд сайын resume() шақырамыз. */
+setInterval(()=>{
+  if('speechSynthesis' in window && speechSynthesis.speaking && !speechSynthesis.paused){
+    speechSynthesis.pause();
+    speechSynthesis.resume();
+  }
+}, 4000);
+
+function logDbg(msg){
+  const box = document.getElementById('dbgLog');
+  if(!box) return;
+  const line = document.createElement('div');
+  line.textContent = new Date().toLocaleTimeString()+' — '+msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+
+function robotTalk(on){
+  document.getElementById('robot').classList.toggle('talking', on);
+}
+
+function speakViaBrowser(text, onDone){
+  if(speechVoice && 'speechSynthesis' in window){
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = speechVoice; u.lang = speechVoice.lang; u.rate = 0.96; u.pitch = 1.05; u.volume = 1;
+    window.__lastUtterance = u;
+    u.onend = onDone;
+    u.onerror = onDone;
+    speechSynthesis.speak(u);
+  } else {
+    const words = text.split(' ').length;
+    const ms = Math.max(1600, words / 2.3 * 1000);
+    timer = setTimeout(onDone, ms);
+  }
+}
+
+function speakOrCaption(text, index, onDone){
+  if(staticAudioMode === false){ speakViaBrowser(text, onDone); return; }
+
+  const num = String(index+1).padStart(2,'0');
+  audioEl.src = AUDIO_BASE_PATH + 'intro-' + num + '.mp3';
+  audioEl.onended = () => {
+    if(staticAudioMode !== true){ staticAudioMode = true; setVoiceStatus('🎙️ Дайын аудио файл ойнатылуда (kk-KZ-DauletNeural)', true); }
+    onDone();
+  };
+  audioEl.onerror = () => {
+    staticAudioMode = false;
+    logDbg('audio/intro-'+num+'.mp3 табылмады → браузер дауысына көшу');
+    setVoiceStatus(speechVoice ? ('🎙️ '+speechVoice.name+' (браузер дауысы)') : '⚠️ Дауыс табылмады — субтитр режимі', !!speechVoice);
+    speakViaBrowser(text, onDone);
+  };
+  audioEl.play().catch(() => { audioEl.onerror(); });
+}
+
+function playNext(){
+  if(idx >= SCRIPT.length){ finishNarration(); return; }
+  document.getElementById('caption').textContent = SCRIPT[idx];
+  updateDots(idx);
+  robotTalk(true);
+  speakOrCaption(SCRIPT[idx], idx, ()=>{
+    robotTalk(false);
+    idx++;
+    if(playing) playNext();
+  });
+}
+
+function togglePlay(){
+  if(playing){ pause(); } else { play(); }
+}
+function play(){
+  playing = true;
+  document.getElementById('playBtn').textContent = '⏸ Тоқтату';
+  if(staticAudioMode !== false && audioEl.paused && audioEl.currentTime>0) audioEl.play();
+  if('speechSynthesis' in window && speechSynthesis.paused) speechSynthesis.resume();
+  playNext();
+}
+function pause(){
+  playing = false;
+  document.getElementById('playBtn').textContent = '▶ Жалғастыру';
+  audioEl.pause();
+  if('speechSynthesis' in window) speechSynthesis.pause();
+  clearTimeout(timer);
+}
+function replay(){
+  audioEl.pause(); audioEl.currentTime = 0;
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  clearTimeout(timer);
+  idx = 0; playing = true;
+  document.getElementById('playBtn').textContent = '⏸ Тоқтату';
+  document.getElementById('startTestBtn').classList.add('disabled');
+  playNext();
+}
+function skip(){
+  audioEl.pause();
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  clearTimeout(timer);
+  finishNarration();
+}
+function finishNarration(){
+  playing = false;
+  robotTalk(false);
+  document.getElementById('caption').textContent = 'Дайынсың ба? Тестті бастайық! 🚀';
+  updateDots(SCRIPT.length);
+  document.getElementById('playBtn').textContent = '▶ Тыңдау';
+  document.getElementById('startTestBtn').classList.remove('disabled');
+}
+
+function testBeep(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = 440;
+    gain.gain.value = 0.2;
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    logDbg('🔊 Гудок ойнатылды (440Гц, 0.4с). Естідің бе?');
+    setTimeout(()=>{ osc.stop(); ctx.close(); }, 400);
+  } catch(e){
+    logDbg('❌ AudioContext қатесі: '+e.message);
+  }
+}
+</script>
+</body>
+</html>

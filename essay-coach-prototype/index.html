@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кім болам? — Мотивациялық эссе көмекшісі (прототип)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#2A1B54; --cream:#FFF9EE; --cream-2:#F3EEFF; --ink:#211545; --muted:#6b6480;
+    --violet:#7B5CFF; --violet-dk:#4E36C4; --violet-soft:#EFEAFF;
+    --green:#22C55E; --green-dk:#178A3F; --green-soft:#DEFAEA;
+    --yellow:#FFC72C; --yellow-dk:#B8860B; --yellow-soft:#FFF3D2;
+    --pink:#FF4D8D; --line:#E6E0F5;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
+  .proto-tag{position:fixed;top:14px;left:14px;font-size:11.5px;font-weight:800;background:var(--night);color:rgba(255,255,255,.8);
+    padding:7px 14px;border-radius:99px;z-index:99}
+
+  header{background:var(--night);color:#fff;padding:70px 28px 40px;text-align:center}
+  header h1{font-size:clamp(26px,4vw,36px);font-weight:900;margin-bottom:10px}
+  header p{color:rgba(255,255,255,.7);font-weight:700;font-size:15px;max-width:520px;margin:0 auto}
+
+  .setup{max-width:640px;margin:-24px auto 30px;background:#fff;border-radius:22px;box-shadow:0 8px 0 var(--line);
+    padding:26px 28px;position:relative;z-index:2}
+  .setup-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .setup label{display:block;font-size:12.5px;font-weight:900;color:var(--muted);margin-bottom:6px}
+  .setup select,.setup input{width:100%;font-family:'Nunito';font-weight:700;font-size:14.5px;
+    padding:12px 14px;border:none;border-radius:12px;background:var(--cream-2)}
+  .setup select:focus,.setup input:focus{outline:2px solid var(--violet-soft)}
+  .setup-note{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px;display:flex;gap:8px;align-items:flex-start}
+
+  .workspace{max-width:1100px;margin:0 auto;padding:0 24px 60px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:860px){.workspace{grid-template-columns:1fr}}
+
+  .panel{background:#fff;border-radius:22px;box-shadow:0 8px 0 var(--line);display:flex;flex-direction:column;overflow:hidden;height:560px}
+  .panel-head{padding:18px 22px;border-bottom:2px solid var(--cream-2);display:flex;align-items:center;gap:10px}
+  .panel-head .dot{width:10px;height:10px;border-radius:50%}
+  .panel-head b{font-size:15px;font-weight:900}
+  .panel-head span{font-size:12px;color:var(--muted);font-weight:700;margin-left:auto}
+
+  /* CHAT */
+  .chat-body{flex:1;overflow-y:auto;padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:88%;padding:12px 16px;border-radius:16px;font-size:14px;font-weight:700;line-height:1.55}
+  .msg.bot{align-self:flex-start;background:var(--cream-2);color:var(--ink);border-bottom-left-radius:4px;white-space:pre-wrap}
+  .msg.user{align-self:flex-end;background:var(--violet);color:#fff;border-bottom-right-radius:4px;white-space:pre-wrap}
+  .msg.typing{align-self:flex-start;background:var(--cream-2);color:var(--muted);font-style:italic}
+  .msg.warn{align-self:center;background:var(--yellow-soft);color:var(--yellow-dk);font-size:12.5px;border-radius:12px;text-align:center}
+  .chat-foot{padding:14px;border-top:2px solid var(--cream-2);display:flex;gap:8px}
+  .chat-foot textarea{flex:1;resize:none;border:none;background:var(--cream-2);border-radius:12px;padding:12px 14px;
+    font-family:'Nunito';font-weight:700;font-size:14px;height:46px}
+  .chat-foot textarea:focus{outline:none}
+  .send-btn{background:var(--violet);border:none;border-radius:12px;width:46px;height:46px;color:#fff;font-size:17px;
+    cursor:pointer;box-shadow:0 4px 0 var(--violet-dk);transition:transform .08s}
+  .send-btn:active{transform:translateY(4px);box-shadow:none}
+
+  /* DRAFT */
+  .draft-body{flex:1;padding:18px 20px;display:flex;flex-direction:column}
+  .draft-body textarea{flex:1;resize:none;border:none;background:var(--cream-2);border-radius:14px;padding:16px 18px;
+    font-family:'Nunito';font-weight:600;font-size:14.5px;line-height:1.6;color:var(--ink)}
+  .draft-body textarea:focus{outline:none}
+  .draft-foot{padding:14px 20px;border-top:2px solid var(--cream-2);display:flex;gap:10px;flex-wrap:wrap}
+  .action-btn{font-family:'Nunito';font-weight:900;font-size:13px;border:none;border-radius:12px;padding:12px 18px;
+    cursor:pointer;transition:transform .08s;box-shadow:0 4px 0 rgba(0,0,0,.12)}
+  .action-btn:active{transform:translateY(4px);box-shadow:none}
+  .action-primary{background:var(--green);color:#fff}
+  .action-ghost{background:var(--cream-2);color:var(--ink)}
+  .word-count{font-size:12px;color:var(--muted);font-weight:700;margin-left:auto;align-self:center}
+</style>
+</head>
+<body>
+
+<div class="proto-tag">🧪 Бөлек прототип · платформаға әлі қосылмаған</div>
+
+<header>
+  <h1>✍️ Мотивациялық эссе көмекшісі</h1>
+  <p>AI саған бағыттаушы сұрақ қояды және жобаңа кері байланыс береді — толық жазып бермейді, тек сұрасаң ғана үлгі ұсынады.</p>
+</header>
+
+<div class="setup">
+  <div class="setup-row">
+    <div>
+      <label>Эссе не үшін?</label>
+      <select id="purpose">
+        <option>Грант өтінімі (мыс. NU)</option>
+        <option>Университетке түсу эссесі</option>
+        <option>Стипендия өтінімі</option>
+        <option>Жалпы мотивациялық хат</option>
+      </select>
+    </div>
+    <div>
+      <label>Мақсатты сала</label>
+      <input id="field" value="Психология" placeholder="мыс. Психология, IT">
+    </div>
+  </div>
+  <div class="setup-note">💡 <span>Бұл — прототип, сондықтан тест профилі қолмен толтырылды (Holland: ISA, MBTI: INFP). Нағыз платформада бұл автоматты түрде сенің нәтижеңнен алынады.</span></div>
+</div>
+
+<div class="workspace">
+  <div class="panel">
+    <div class="panel-head"><span class="dot" style="background:var(--violet)"></span><b>AI бағыттаушы</b><span>Coach режимі</span></div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-foot">
+      <textarea id="chatInput" placeholder="Жауап жаз немесе сұрақ қой..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"></textarea>
+      <button class="send-btn" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><span class="dot" style="background:var(--yellow)"></span><b>Эссе жобаң</b><span id="wc">0 сөз</span></div>
+    <div class="draft-body">
+      <textarea id="draftArea" placeholder="Осы жерге өз эссеңнің жобасын жаз... AI сені бағыттайды, бірақ жазу — сенің қолыңда." oninput="updateWC()"></textarea>
+    </div>
+    <div class="draft-foot">
+      <button class="action-btn action-primary" onclick="askFeedback()">💬 Кері байланыс сұра</button>
+      <button class="action-btn action-ghost" onclick="askFullDraft()">📝 Толық үлгі сұра</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PROD_API_BASE = 'https://YOUR-DEPLOY-URL.vercel.app';
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3000'
+  : PROD_API_BASE;
+const AI_API_URL = API_BASE + '/api/essay-coach';
+
+// Прототип үшін тест профилі қолмен қойылды — нағыз платформада aiProfile-дан алынады
+const profile = {
+  hollandCode: 'ISA',
+  hollandNames: 'Аналитик, Көмекші, Креатор',
+  mbtiType: 'INFP',
+  topSpecialties: ['B041', 'B001']
+};
+
+let messages = [];
+let busy = false;
+
+function essayContext(){
+  return { purpose: document.getElementById('purpose').value, field: document.getElementById('field').value };
+}
+
+function appendMsg(role, text){
+  const body = document.getElementById('chatBody');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+
+function updateWC(){
+  const text = document.getElementById('draftArea').value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  document.getElementById('wc').textContent = words + ' сөз';
+}
+
+async function callAI(userText, mode){
+  if(busy) return;
+  busy = true;
+  const typing = appendMsg('bot typing', 'Жазып жатыр...');
+  try{
+    const res = await fetch(AI_API_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ profile, essayContext: essayContext(), messages, mode })
+    });
+    const data = await res.json();
+    typing.remove();
+    if(!res.ok || !data.reply){
+      appendMsg('bot', data.error || 'Қате шықты, кейінірек қайталап көр.');
+    } else {
+      appendMsg('bot', data.reply);
+      messages.push({role:'assistant', content:data.reply});
+    }
+  } catch(e){
+    typing.remove();
+    appendMsg('bot', 'Байланыс қатесі — backend әлі деплой етілмеген болуы мүмкін (бұл прототип).');
+  }
+  busy = false;
+}
+
+function sendChat(){
+  const inp = document.getElementById('chatInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  appendMsg('user', text);
+  messages.push({role:'user', content:text});
+  callAI(text, 'coach');
+}
+
+function askFeedback(){
+  const draft = document.getElementById('draftArea').value.trim();
+  if(!draft){ appendMsg('bot warn', 'Алдымен оң жақта эссе жобаңды жаз, содан кейін кері байланыс сұра.'); return; }
+  const msg = 'Міне менің эссе жобам, кері байланыс берші:\n\n' + draft;
+  appendMsg('user', '📄 [Эссе жобамды жібердім — ' + draft.split(/\s+/).length + ' сөз]');
+  messages.push({role:'user', content: msg});
+  callAI(msg, 'coach');
+}
+
+function askFullDraft(){
+  appendMsg('user', 'Толық үлгі эссе жаз.');
+  messages.push({role:'user', content:'Толық үлгі эссе жаз.'});
+  appendMsg('bot warn', '⚠️ Толық үлгі — тек бастапқы нүкте. Оны сол қалпында ешқашан тапсырма!');
+  callAI('Толық үлгі эссе жаз.', 'full_draft');
+}
+
+// бастапқы сәлемдесу
+appendMsg('bot', 'Сәлем! Мен саған мотивациялық эссеңді дамытуға көмектесемін. Тест нәтижең бойынша сен ' + profile.hollandNames.split(',')[0] + ' бағытына жақынсың және Психология саласына бейімсің.\n\nБастау үшін айтшы: неге дәл осы сала сені қызықтырды? Нақты бір сәтті немесе оқиғаны еске түсір.');
+</script>
+</body>
+</html>

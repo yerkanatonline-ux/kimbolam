@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кім болам? — өз жолыңды тап</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{
+  --night:#0A0A0F; --night-2:#14141F;
+  --cream:#FFF9EE; --cream-2:#F3EEFF;
+  --ink:#211545; --muted:#6b6480;
+  --line:#E6E0F5;
+
+  --violet:#7B5CFF; --violet-dk:#4E36C4; --violet-soft:#EFEAFF;
+  --green:#22C55E; --green-dk:#178A3F; --green-soft:#DEFAEA;
+  --yellow:#FFC72C; --yellow-dk:#B8860B; --yellow-soft:#FFF3D2;
+  --pink:#FF4D8D; --pink-dk:#C22163; --pink-soft:#FFE1EC;
+  --blue:#29B6F6; --blue-dk:#0B87C4; --blue-soft:#DBF2FE;
+  --orange:#FF6B4A; --orange-dk:#C43D1F; --orange-soft:#FFE3DB;
+
+  --ok:#178A3F;
+  --gold-deep:#B8860B;
+  --sky:#29B6F6; --sky-deep:#0B87C4;
+
+  /* tech-modern accent gradient (жаңа дизайн бағыты) */
+  --grad-a:#8B5CF6; --grad-b:#22D3EE;
+  --gradient:linear-gradient(90deg,var(--grad-a),var(--grad-b));
+  --glow:0 8px 24px rgba(139,92,246,.35);
+  --glow-sm:0 4px 14px rgba(139,92,246,.28);
+
+  --shadow:0 4px 16px rgba(20,10,40,.08);
+  --shadow-sm:0 2px 10px rgba(20,10,40,.06);
+  --shadow-lg:0 12px 34px rgba(20,10,40,.12);
+  --shadow-dark:0 12px 32px rgba(0,0,0,.35);
+  --r:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Golos Text',system-ui,sans-serif;
+  background:var(--cream);color:var(--ink);
+  line-height:1.55;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{font-family:'Golos Text',sans-serif;font-weight:900;letter-spacing:-.02em;line-height:1.08}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+.hidden{display:none!important}
+
+/* NAV */
+header{position:sticky;top:0;z-index:50;background:rgba(10,10,15,.82);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{display:flex;align-items:center;gap:20px;height:76px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px;cursor:pointer;color:#fff}
+.logo .mark{width:34px;height:34px;flex:0 0 34px}
+.navlinks{display:flex;gap:4px;margin-left:12px;flex-wrap:wrap}
+.navlinks button{
+  font-family:'Golos Text';font-size:14.5px;font-weight:700;color:rgba(255,255,255,.6);
+  background:none;border:none;cursor:pointer;padding:10px 14px;border-radius:12px;transition:.15s;
+}
+.navlinks button:hover{color:#fff;background:rgba(255,255,255,.08)}
+.navlinks button.active{color:#fff;background:rgba(139,92,246,.22)}
+.nav-auth{display:flex;align-items:center;gap:14px;margin-left:auto}
+.nav-login{font-weight:700;font-size:14.5px;color:rgba(255,255,255,.6);cursor:pointer}
+.nav-login:hover{color:#fff}
+.nav-register{
+  font-family:'Golos Text';font-weight:800;font-size:13.5px;color:#fff;
+  background:rgba(255,255,255,.1);border:none;border-radius:12px;padding:10px 16px;cursor:pointer;
+}
+.cta{
+  color:#fff;background:var(--gradient);font-weight:800;font-size:14.5px;
+  padding:12px 22px;border-radius:14px;box-shadow:var(--glow-sm);transition:transform .12s,box-shadow .12s;
+  border:none;cursor:pointer;font-family:'Golos Text';
+}
+.cta:hover{box-shadow:var(--glow);transform:translateY(-1px)}
+.cta:active{transform:translateY(0) scale(.97);box-shadow:var(--shadow-sm)}
+
+/* HERO (space band) */
+.hero{background:var(--night);color:#fff;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:560px;height:560px;background:radial-gradient(circle,rgba(139,92,246,.35),transparent 70%);top:-260px;left:-140px;z-index:0;filter:blur(10px)}
+.hero::after{content:"";position:absolute;width:520px;height:520px;background:radial-gradient(circle,rgba(34,211,238,.28),transparent 70%);bottom:-260px;right:-160px;z-index:0;filter:blur(10px)}
+.hero .wrap{padding:64px 28px 50px;position:relative;z-index:2}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:800;color:#fff;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);padding:9px 18px;border-radius:99px;margin-bottom:24px}
+.hero h1{font-size:clamp(36px,6vw,60px);font-weight:900;max-width:16ch;color:#fff}
+.hero h1 em{font-style:normal;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:clamp(17px,2.1vw,19px);font-weight:600;color:rgba(255,255,255,.68);max-width:46ch;margin:20px 0 32px}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.btn{font-family:'Golos Text';font-size:16.5px;font-weight:800;padding:18px 30px;border-radius:16px;border:none;cursor:pointer;transition:transform .12s,box-shadow .12s;display:inline-flex;align-items:center;gap:9px}
+.btn:active{transform:translateY(0) scale(.97)}
+.btn-gold{background:var(--gradient);color:#fff;box-shadow:var(--glow)}
+.btn-gold:hover{box-shadow:0 10px 30px rgba(139,92,246,.45);transform:translateY(-1px)}
+.btn-gold:active{box-shadow:var(--glow-sm)}
+.btn-ghost{background:rgba(255,255,255,.06);color:#fff;border:1px solid rgba(255,255,255,.18);box-shadow:none}
+.btn-ghost:hover{background:rgba(255,255,255,.1)}
+.hero-stats{display:flex;gap:14px;margin-top:44px;flex-wrap:wrap}
+.hero-stats div{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px 18px}
+.hero-stats div span{display:block}
+.hero-stats .n{font-weight:900;font-size:22px;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-stats .l{font-size:11.5px;color:rgba(255,255,255,.6);font-weight:700}
+
+/* CARD FAN (hero decoration) */
+.fan{position:relative;height:230px;max-width:600px;margin:56px auto 0;z-index:3;overflow:visible}
+.fan-card{position:absolute;top:0;left:50%;width:180px;height:210px;border-radius:22px;padding:20px 18px;color:#fff;box-shadow:var(--shadow-dark);border:1px solid rgba(255,255,255,.12);display:flex;flex-direction:column;justify-content:space-between}
+.fan-card:nth-child(1){background:var(--blue);transform:translateX(-125%) rotate(-8deg)}
+.fan-card:nth-child(2){background:var(--violet);transform:translateX(-50%) rotate(0deg) translateY(-14px);z-index:2}
+.fan-card:nth-child(3){background:var(--pink);transform:translateX(25%) rotate(8deg)}
+.fan-card .fnum{font-weight:900;font-size:11.5px;opacity:.8}
+.fan-card .ftitle{font-weight:900;font-size:18px;line-height:1.15}
+.fan-card .fq{font-weight:900;font-size:28px}
+.fan-card .fq small{font-size:11.5px;font-weight:800;opacity:.85;display:block}
+
+/* SECTIONS */
+section.block{padding:72px 0}
+.kicker{display:inline-block;font-size:12.5px;font-weight:900;color:var(--violet-dk);background:var(--violet-soft);padding:7px 16px;border-radius:99px;margin-bottom:16px}
+h2.title{font-size:clamp(26px,4vw,38px);font-weight:900;max-width:20ch;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:16.5px;font-weight:700;max-width:56ch;margin-top:14px}
+
+/* PATH — 4 steps (space band) */
+.path-wrap{margin-top:8px;position:relative;background:var(--night);border-radius:28px;padding:44px 36px;margin-top:36px;overflow:hidden}
+.path-wrap::before{content:"";position:absolute;width:420px;height:420px;background:radial-gradient(circle,rgba(34,211,238,.18),transparent 70%);top:-200px;right:-140px;z-index:0}
+.path-wrap .kicker{background:rgba(255,255,255,.08);color:#fff;position:relative;z-index:1}
+.path-wrap h2.title{color:#fff;position:relative;z-index:1}
+.path-wrap .sub{color:rgba(255,255,255,.62);position:relative;z-index:1}
+.path-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:2;margin-top:34px}
+.step{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px 18px;box-shadow:none}
+.step .num{font-weight:900;font-size:15px;color:#fff;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--blue);margin-bottom:14px}
+.step:nth-child(2) .num{background:var(--green)}
+.step:nth-child(3) .num{background:var(--violet)}
+.step:nth-child(4) .num{background:var(--pink)}
+.step h3{font-size:17px;font-weight:900;margin-bottom:6px;color:#fff}
+.step p{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.6)}
+.path-line{display:none}
+
+/* DIFFERENTIATOR */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:36px}
+.card{background:var(--cream-2);border-radius:22px;padding:30px}
+.card.them{background:#EFEDF7;box-shadow:var(--shadow-sm)}
+.card.us{background:linear-gradient(135deg,var(--grad-a),#5B3FD9);color:#fff;box-shadow:var(--glow)}
+.card .tag{font-size:12px;font-weight:900;padding:6px 14px;border-radius:99px;display:inline-block;margin-bottom:16px}
+.card.them .tag{color:#615B7A;background:#DAD6EC}
+.card.us .tag{color:#fff;background:rgba(255,255,255,.2)}
+.card h3{font-size:21px;font-weight:900;margin-bottom:14px;letter-spacing:-.01em}
+.card.them h3{color:var(--ink)}
+.card ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.card li{display:flex;gap:11px;font-size:14.5px;font-weight:700;align-items:flex-start;line-height:1.4}
+.card.them li{color:#5C5673}
+.card.us li{color:rgba(255,255,255,.94)}
+.card li .ic{flex:0 0 18px;margin-top:1px;font-weight:900}
+
+/* QUOTE BAND */
+.quote-band{background:var(--night);padding:80px 28px;text-align:center;border-radius:28px;margin:20px 0;position:relative;overflow:hidden}
+.quote-band::before{content:"";position:absolute;width:480px;height:480px;background:radial-gradient(circle,rgba(139,92,246,.22),transparent 70%);top:-220px;left:50%;transform:translateX(-50%);z-index:0}
+.quote-mark{font-size:80px;font-weight:900;background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1;opacity:.9;font-family:Georgia,serif;position:relative;z-index:1}
+.quote-text{color:#fff;font-weight:700;font-size:clamp(17px,2.2vw,23px);line-height:1.55;max-width:740px;margin:0 auto 26px;letter-spacing:-.01em;position:relative;z-index:1}
+.quote-author{display:inline-flex;align-items:center;gap:14px;position:relative;z-index:1}
+.quote-avatar{width:42px;height:42px;border-radius:50%;background:var(--gradient);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:16px}
+.quote-name{text-align:left}
+.quote-name b{display:block;color:#fff;font-size:14.5px;font-weight:900}
+.quote-name span{color:rgba(255,255,255,.6);font-size:12px;font-weight:700}
+
+/* TEST */
+.panel{background:#fff;border-radius:26px;box-shadow:var(--shadow-lg);padding:40px;max-width:760px;margin:0 auto}
+.progress{height:12px;background:var(--cream-2);border-radius:99px;overflow:hidden;margin-bottom:10px}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--violet));width:0;transition:width .3s;border-radius:99px}
+.pcount{font-size:13.5px;color:var(--muted);margin-bottom:28px;font-weight:800}
+.sec-label{display:inline-block;font-size:12.5px;font-weight:900;color:var(--violet-dk);background:var(--violet-soft);padding:7px 15px;border-radius:99px;margin-bottom:16px}
+.sec-prompt{font-size:14.5px;color:var(--blue-dk);font-weight:800;margin-bottom:14px}
+.q{font-weight:900;font-size:clamp(20px,3vw,26px);line-height:1.3;margin-bottom:32px;min-height:1.6em}
+.likert{display:grid;gap:12px}
+.likert.seven{gap:8px}
+.likert.seven button{padding:14px 18px}
+.likert button{
+  text-align:left;font-family:'Golos Text';font-size:16px;font-weight:800;
+  padding:18px 22px;border:none;border-radius:16px;background:var(--cream-2);cursor:pointer;transition:transform .08s,box-shadow .08s;display:flex;align-items:center;gap:14px;color:var(--ink);
+  box-shadow:var(--shadow-sm);
+}
+.likert button:hover{background:var(--violet-soft)}
+.likert button:active{transform:scale(.98);box-shadow:var(--shadow-sm)}
+.dot{width:18px;height:18px;border-radius:50%;border:3px solid var(--violet);flex:0 0 18px;background:#fff}
+.likert button:nth-child(1) .dot{background:var(--orange);border-color:var(--orange)}
+.likert button:nth-child(2) .dot{background:var(--pink);border-color:var(--pink)}
+.likert button:nth-child(3) .dot{background:var(--blue-soft);border-color:var(--blue)}
+.likert button:nth-child(4) .dot{border-color:var(--line)}
+.likert button:nth-child(5) .dot{background:var(--blue-soft);border-color:var(--blue)}
+.likert button:nth-child(6) .dot{background:var(--green);border-color:var(--green)}
+.likert button:nth-child(7) .dot{background:var(--violet);border-color:var(--violet)}
+.backlink{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;font-weight:800;margin-top:22px;font-family:'Golos Text'}
+.backlink:hover{color:var(--ink)}
+
+/* Klimov forced-choice */
+.pickbox{display:grid;gap:14px}
+.pickbox .pickopt{display:flex;align-items:center;gap:14px;text-align:left;font-family:'Golos Text';font-size:16.5px;font-weight:800;color:var(--ink);background:var(--cream-2);border:none;border-radius:16px;padding:20px 22px;cursor:pointer;transition:transform .08s,box-shadow .08s;line-height:1.4;box-shadow:var(--shadow-sm)}
+.pickbox .pickopt:hover{background:var(--violet-soft)}
+.pickbox .pickopt:active{transform:scale(.98);box-shadow:var(--shadow-sm)}
+.pickbox .pk-let{flex:0 0 auto;width:36px;height:36px;border-radius:50%;background:var(--violet);color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:15px}
+
+/* convergence */
+.conv-row{display:flex;align-items:stretch;gap:12px;margin-bottom:16px}
+.conv-side{flex:1;background:var(--cream-2);border-radius:16px;padding:14px 16px;text-align:center}
+.conv-side .conv-lbl{display:block;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;font-weight:800}
+.conv-side b{font-size:15px}
+.conv-link{display:flex;align-items:center;font-weight:900;font-size:13.5px;padding:0 6px;text-align:center}
+.conv-link.ok{color:var(--green-dk)} .conv-link.no{color:var(--orange-dk)}
+.conf-badge{display:inline-block;font-weight:900;font-size:14px;padding:10px 20px;border-radius:99px}
+.conf-badge.conf-hi{background:var(--green-soft);color:var(--green-dk)}
+.conf-badge.conf-mid{background:var(--yellow-soft);color:var(--yellow-dk)}
+.conf-badge.conf-lo{background:var(--pink-soft);color:var(--pink-dk)}
+
+/* AI кеңесші chat widget */
+#aiFab{position:fixed;right:24px;bottom:24px;z-index:500;width:62px;height:62px;border-radius:20px;
+  background:var(--gradient);color:#fff;border:none;box-shadow:var(--glow-sm);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform .12s,box-shadow .12s}
+#aiFab:active{transform:scale(.92);box-shadow:var(--glow-sm)}
+#aiPanel{position:fixed;right:24px;bottom:100px;z-index:500;width:380px;max-width:calc(100vw - 32px);
+  height:560px;max-height:calc(100vh - 140px);background:#fff;border-radius:26px;
+  box-shadow:0 20px 60px rgba(33,21,69,.28);display:none;flex-direction:column;overflow:hidden;
+  border:3px solid var(--violet-soft)}
+#aiPanel.open{display:flex}
+.ai-head{background:var(--violet);color:#fff;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.ai-head b{font-size:15px;font-weight:900}
+.ai-head span{font-size:12px;opacity:.85;display:block;margin-top:2px;font-weight:700}
+.ai-close{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;opacity:.85;padding:4px}
+.ai-close:hover{opacity:1}
+.ai-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--cream-2)}
+.ai-msg{max-width:85%;padding:11px 15px;border-radius:16px;font-size:14px;font-weight:700;line-height:1.5}
+.ai-msg.user{align-self:flex-end;background:var(--violet);color:#fff;border-bottom-right-radius:4px}
+.ai-msg.bot{align-self:flex-start;background:#fff;color:var(--ink);box-shadow:var(--shadow-sm);border-bottom-left-radius:4px}
+.ai-msg.typing{align-self:flex-start;background:#fff;box-shadow:var(--shadow-sm);color:var(--muted);font-style:italic}
+.ai-foot{padding:12px;border-top:3px solid var(--cream-2);display:flex;gap:8px;background:#fff}
+.ai-foot textarea{flex:1;resize:none;border:none;background:var(--cream-2);border-radius:14px;padding:11px 14px;
+  font-family:'Golos Text';font-weight:700;font-size:14px;height:46px;line-height:1.3}
+.ai-foot textarea:focus{outline:none;box-shadow:0 0 0 2.5px var(--violet-soft)}
+.ai-send{background:var(--gradient);border:none;border-radius:14px;width:46px;height:46px;flex:0 0 auto;
+  cursor:pointer;font-size:18px;color:#fff;box-shadow:var(--glow-sm);transition:transform .12s,box-shadow .12s}
+.ai-send:active{transform:scale(.93);box-shadow:var(--glow-sm)}
+.ai-send:disabled{opacity:.5;cursor:default}
+.ai-note{font-size:11px;color:var(--muted);font-weight:700;padding:0 16px 10px;text-align:center}
+@media(max-width:480px){#aiPanel{right:12px;left:12px;width:auto;bottom:92px}#aiFab{right:16px;bottom:16px}}
+
+/* RESULTS */
+.result-head{background:var(--night);color:#fff;border-radius:26px;padding:40px;margin-bottom:28px}
+.result-head .code{font-weight:900;font-size:52px;color:var(--yellow);letter-spacing:.02em}
+.result-head h2{font-size:25px;margin:8px 0 12px;color:#fff}
+.result-head p{color:rgba(255,255,255,.72);font-weight:700;max-width:60ch}
+.bars{display:grid;gap:12px;margin-top:26px}
+.bar-row{display:grid;grid-template-columns:150px 1fr 44px;align-items:center;gap:14px;font-size:14px;font-weight:800}
+.bar-track{height:14px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:99px;transition:width .8s}
+.bar-val{font-weight:900;font-size:13px;color:var(--yellow);text-align:right}
+.grid-jobs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:26px}
+
+/* REPORT */
+.report-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.rb-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rb-tag{font-size:12.5px;font-weight:900;color:var(--violet-dk);background:var(--violet-soft);padding:6px 14px;border-radius:99px}
+#stuName{font-family:'Golos Text';font-size:16px;font-weight:800;padding:12px 18px;border:none;border-radius:14px;background:var(--cream-2);min-width:200px;box-shadow:var(--shadow-sm)}
+#stuName:focus{outline:none}
+.gate-input{font-family:'Golos Text';font-size:16px;font-weight:700;padding:14px 18px;border:none;border-radius:14px;background:var(--cream-2);box-shadow:var(--shadow-sm);width:100%}
+.gate-input:focus{outline:none;box-shadow:0 0 0 2.5px var(--violet-soft)}
+.pdf-export .no-print{display:none!important}
+#catSearch,#uniSearch{width:100%;font-family:'Golos Text';font-size:16px;font-weight:700;padding:16px 20px;border:none;border-radius:16px;background:var(--cream-2);margin:22px 0 4px;box-shadow:var(--shadow-sm)}
+#catSearch:focus,#uniSearch:focus{outline:none}
+.cat-count{font-size:13.5px;color:var(--muted);font-weight:800;margin:16px 0 18px}
+.uni-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.uni-card{display:flex;gap:14px;align-items:flex-start;background:#fff;border-radius:18px;padding:18px 20px;box-shadow:var(--shadow-sm)}
+.uni-card .uni-code{font-weight:900;font-size:12.5px;color:#fff;background:var(--blue);padding:6px 10px;border-radius:9px;flex:0 0 auto}
+.uni-card h3{font-size:15px;font-weight:900;line-height:1.3;margin-bottom:5px}
+.uni-card .uni-city{font-size:13px;color:var(--muted);font-weight:700}
+.rh-name{font-weight:800;font-size:15px;color:var(--yellow);margin-bottom:6px;min-height:1.2em}
+.mt2{margin-top:44px}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
+.rcard{background:#fff;border-radius:22px;padding:26px;box-shadow:var(--shadow)}
+.rcard h3{font-weight:900;font-size:17px;margin-bottom:16px}
+.rcard ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+.rcard li{display:flex;gap:11px;font-size:14.5px;font-weight:700;align-items:flex-start}
+.rcard.str li::before{content:"✦";color:var(--green);font-weight:900}
+.rcard.wat li::before{content:"•";color:var(--violet);font-weight:900}
+.rcard.combo{margin-top:20px;background:var(--violet-soft);border-left:6px solid var(--violet)}
+.rcard.combo .ct{font-weight:900;font-size:19px;margin-bottom:10px}
+.rcard.combo p{font-size:15px;font-weight:700;color:var(--muted)}
+.rcard.env{margin-top:20px}
+.rcard.env .et{font-weight:900;font-size:19px;margin-bottom:10px}
+.rcard.env p{font-size:15px;font-weight:700;color:var(--muted)}
+.subj-item{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:2px solid var(--cream-2);font-size:14.5px;font-weight:700}
+.subj-item:last-child{border-bottom:none}
+.subj-item b{font-weight:900}
+.subj-item span{font-size:13px;color:var(--muted);text-align:right;font-weight:700}
+.checklist li{display:flex;gap:11px;font-size:14.5px;font-weight:700;align-items:flex-start}
+.checklist li::before{content:"☐";color:var(--blue);font-size:18px;line-height:1.2}
+.rcard.quest{margin-top:20px}
+.rcard.quest li{margin-bottom:11px}
+.rcard.quest li::before{content:"→";color:var(--violet);font-weight:900}
+.quest-note{font-size:13.5px;color:var(--muted);font-weight:700;margin-top:16px;padding-top:16px;border-top:2px solid var(--cream-2);font-style:italic}
+.job .why{font-size:13.5px;font-weight:700;color:var(--blue-dk);background:var(--blue-soft);padding:9px 12px;border-radius:12px;margin:12px 0}
+
+/* REPORT SECTIONS */
+.rsection{margin-top:52px;position:relative}
+.sec-num{font-weight:900;font-size:14px;color:var(--violet-dk);background:var(--violet-soft);width:44px;height:44px;border-radius:14px;display:grid;place-items:center;margin-bottom:16px}
+.sec-title{font-size:clamp(23px,3.4vw,30px);font-weight:900;margin-bottom:8px}
+.sec-lead{color:var(--muted);font-size:15.5px;font-weight:700;max-width:60ch;margin-bottom:24px}
+
+.strength-block{background:#fff;border-radius:22px;padding:24px 26px;margin-bottom:16px;box-shadow:var(--shadow);border-left:6px solid var(--blue)}
+.strength-block .sb-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.strength-block .sb-badge{font-weight:900;font-size:13px;color:#fff;background:var(--blue);padding:6px 13px;border-radius:10px}
+.strength-block h3{font-weight:900;font-size:19px}
+.sb-row{font-size:15px;font-weight:700;margin-bottom:9px;display:flex;gap:9px}
+.sb-row b{color:var(--blue-dk);font-weight:900;flex:0 0 auto}
+.sb-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
+.narr{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.narr .nc{background:#fff;border-radius:20px;padding:24px;box-shadow:var(--shadow-sm)}
+.narr .nc h3{font-weight:900;font-size:16.5px;margin-bottom:10px;display:flex;align-items:center;gap:9px}
+.narr .nc p{font-size:14.5px;font-weight:700;color:var(--muted)}
+
+.ranked{display:flex;flex-direction:column;gap:10px}
+.rank-row{display:grid;grid-template-columns:38px 1fr auto;align-items:center;gap:16px;background:#fff;border-radius:18px;padding:16px 20px;box-shadow:var(--shadow-sm);transition:transform .1s}
+.rank-row:hover{transform:translateY(-2px)}
+.rank-row .rk{font-weight:900;font-size:18px;color:var(--violet-dk)}
+.rank-row .rinfo h3{font-size:16.5px;font-weight:900;margin-bottom:3px}
+.rank-row .rinfo-sub{font-size:13px;font-weight:700;color:var(--muted)}
+.rank-row .rinfo-sub .sp-tag{color:var(--blue-dk);font-weight:900}
+.rank-row .rk-pct{font-weight:900;font-size:20px;color:var(--green-dk);text-align:right}
+.rank-row .rk-pct small{display:block;font-weight:700;font-size:11px;color:var(--muted)}
+.muted-rank .rank-row{background:var(--cream-2);box-shadow:none}
+.muted-rank .rank-row .rk-pct{color:var(--muted)}
+.muted-rank .rank-row .rk{color:var(--muted)}
+
+.cmp-row{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center;margin-bottom:16px}
+.cmp-row .cmp-name{font-weight:800;font-size:15px}
+.cmp-bars{display:flex;flex-direction:column;gap:6px}
+.cmp-bar{display:grid;grid-template-columns:80px 1fr 40px;align-items:center;gap:10px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.cmp-track{height:11px;background:var(--cream-2);border-radius:99px;overflow:hidden}
+.cmp-fill.int{height:100%;background:var(--violet);border-radius:99px}
+.cmp-fill.eff{height:100%;background:var(--yellow);border-radius:99px}
+.cmp-val{text-align:right;font-weight:900;color:var(--ink)}
+.cmp-note{margin-top:8px;font-size:14.5px;font-weight:700;color:var(--ink);background:var(--cream-2);padding:16px 18px;border-radius:16px;line-height:1.55}
+.val-note{margin-top:16px;font-size:14.5px;font-weight:700;color:var(--muted);padding-top:14px;border-top:2px solid var(--cream-2)}
+.rcard.val .bar-row span:first-child{color:var(--ink)}
+
+.rcard.dev{margin-top:16px}
+.rcard.dev h4{font-weight:900;font-size:15px;margin:14px 0 8px}
+.rcard.dev h4:first-child{margin-top:0}
+.rcard.dev ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.rcard.dev li{font-size:14.5px;font-weight:700;color:var(--muted);display:flex;gap:9px}
+.rcard.dev li::before{content:"·";color:var(--violet);font-weight:900}
+
+.closing{background:var(--night);color:#fff;border-radius:26px;padding:44px;margin-top:52px;text-align:center}
+.closing .cl-quote{font-weight:900;font-size:clamp(17px,2.6vw,22px);color:var(--yellow);margin-bottom:18px;line-height:1.4}
+.closing .cl-text{font-size:15px;font-weight:700;color:rgba(255,255,255,.75);max-width:56ch;margin:0 auto 22px}
+.closing .cl-brand{font-size:13px;font-weight:800;color:rgba(255,255,255,.55);letter-spacing:.03em}
+
+@media print{
+  header,footer,.no-print{display:none!important}
+  body{background:#fff}
+  .block{padding:12px 0}
+  .result-head,.closing{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+  .result-head .code,.rh-name,.closing .cl-quote{color:var(--violet-dk)}
+  .result-head p,.closing .cl-text,.closing .cl-brand{color:var(--muted)}
+  .bar-track{background:#eee}
+  .rcard,.job,.strength-block,.rank-row,.narr .nc{break-inside:avoid;box-shadow:none}
+  .rsection{break-inside:avoid-page}
+  .two,.narr{grid-template-columns:1fr 1fr}
+}
+
+/* JOB CARDS */
+.job{background:#fff;border-radius:22px;padding:24px;box-shadow:var(--shadow);transition:transform .1s;cursor:default}
+.job:hover{transform:translateY(-3px)}
+.job .match{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:900;color:var(--green-dk);background:var(--green-soft);padding:5px 11px;border-radius:99px;margin-bottom:12px}
+.job h3{font-size:18px;font-weight:900;margin-bottom:8px}
+.job p{font-size:14px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11.5px;font-weight:800;padding:5px 11px;border-radius:99px;background:var(--blue-soft);color:var(--blue-dk)}
+.chip.dm{background:var(--yellow-soft);color:var(--yellow-dk)}
+
+/* CATALOG */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 34px}
+.filters button{font-family:'Golos Text';font-size:13.5px;font-weight:800;padding:10px 18px;border-radius:99px;border:none;background:#fff;color:var(--muted);cursor:pointer;transition:.14s;box-shadow:var(--shadow-sm)}
+.filters button:hover{background:var(--violet-soft);color:var(--violet-dk)}
+.filters button.on{background:var(--violet);color:#fff;box-shadow:var(--glow-sm)}
+
+/* DASHBOARD (teacher) */
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin:30px 0}
+.stat{background:#fff;border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+.stat .n{font-weight:900;font-size:32px;color:var(--ink)}
+.stat .n.g{color:var(--violet-dk)}
+.stat .l{font-size:13.5px;font-weight:700;color:var(--muted);margin-top:4px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)}
+th,td{text-align:left;padding:15px 20px;font-size:14px;font-weight:700;border-bottom:2px solid var(--cream-2)}
+th{background:var(--cream-2);font-weight:900;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+tr:last-child td{border-bottom:none}
+.pill{font-size:12px;font-weight:900;padding:4px 11px;border-radius:99px;background:var(--blue-soft);color:var(--blue-dk)}
+
+/* PARENT */
+.adv{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:34px}
+.adv .card{padding:26px;background:#fff;box-shadow:var(--shadow)}
+.adv .ico{width:46px;height:46px;border-radius:14px;background:var(--violet-soft);display:grid;place-items:center;margin-bottom:16px;font-size:20px}
+.adv h3{font-size:17px;font-weight:900;margin-bottom:8px}
+.adv p{font-size:14px;font-weight:700;color:var(--muted)}
+
+/* note */
+.note{background:var(--yellow-soft);border-radius:16px;padding:16px 20px;font-size:14px;font-weight:700;color:var(--yellow-dk);margin-top:34px;display:flex;gap:12px}
+.note b{color:var(--ink)}
+
+/* FOOTER */
+footer{background:var(--night);color:rgba(255,255,255,.6);padding:48px 0;margin-top:20px}
+footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+footer .logo{color:#fff}
+footer small{font-size:13px;font-weight:700}
+
+.center{text-align:center}
+.mt{margin-top:36px}
+
+@media(max-width:820px){
+  .path-steps{grid-template-columns:1fr 1fr}
+  .compare{grid-template-columns:1fr}
+  .navlinks{display:none}
+  .nav-auth .nav-login,.nav-auth .nav-register{display:none}
+  .bar-row{grid-template-columns:110px 1fr 40px}
+  .panel{padding:26px}
+  .result-head,.card{padding:26px}
+  .fan{transform:scale(.72)}
+}
+@media(max-width:520px){.path-steps{grid-template-columns:1fr}.hero-stats{gap:10px}}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo" onclick="go('home')">
+      <svg class="mark" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="9" fill="#12A3B4"/>
+        <path d="M8 23 C 12 12, 20 20, 24 9" stroke="#E9A83A" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <circle cx="8" cy="23" r="2.6" fill="#FBF7EF"/>
+        <circle cx="24" cy="9" r="2.6" fill="#E9A83A"/>
+      </svg>
+      Кім болам?
+    </div>
+    <!-- Каталог/Университеттер/Мұғалімге/Ата-анаға/Кіру/Тіркелу — MVP-де әдейі жасырылған,
+         бетті тек тестке шоғырландыру үшін. Кодтары (#catalog, #unis, #teacher, #parent)
+         файлда сол қалпында қалды, кейін қайта қосу үшін осы блокты қалпына келтіру жеткілікті. -->
+    <div class="nav-auth" style="margin-left:auto">
+      <button class="cta" onclick="goGate()">Тестті бастау</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ HOME ============ -->
+<main id="home">
+  <div class="hero">
+    <div class="wrap">
+      <span class="eyebrow">Қазақстандық оқушыларға арналған</span>
+      <h1>Өз <em>жолыңды</em> тап.</h1>
+      <p class="lead">Тұлға типіңді анықтап, соған сай мамандықты табатын платформа. ҰБТ баллы емес — сенің қалауың мен қабілетің бастапқы нүкте.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" onclick="goGate()">Тестті тегін өту →</button>
+        <button class="btn btn-ghost" onclick="go('catalog')">Мамандықтарды қарау</button>
+      </div>
+      <div class="hero-stats">
+        <div><span class="n">3</span><span class="l">тест: Holland · Климов · MBTI</span></div>
+        <div><span class="n">72</span><span class="l">сұрақ</span></div>
+        <div><span class="n">~15&nbsp;мин</span><span class="l">уақыт</span></div>
+      </div>
+    </div>
+    <div class="fan">
+      <div class="fan-card"><div class="fnum">01 · HOLLAND</div><div class="ftitle">Қызығушылық</div><div class="fq">36<small>сұрақ</small></div></div>
+      <div class="fan-card"><div class="fnum">02 · КЛИМОВ</div><div class="ftitle">Бейімділік</div><div class="fq">20<small>жұп</small></div></div>
+      <div class="fan-card"><div class="fnum">03 · МІНЕЗ</div><div class="ftitle">Юнг типі</div><div class="fq">16<small>сұрақ</small></div></div>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="kicker">Қалай жұмыс істейді</div>
+      <h2 class="title">Төрт қадамдық жол</h2>
+      <p class="sub">Оқушы тестен бастап нақты мамандыққа дейінгі жолды бір орында өтеді.</p>
+      <div class="path-wrap">
+        <div class="path-line"></div>
+        <div class="path-steps">
+          <div class="step"><div class="num">1</div><h3>Тест</h3><p>Үш ғылыми тест: Holland (қызығушылық), Климов (бейімділік), MBTI (мінез) — барлығы 72 сұрақ.</p></div>
+          <div class="step"><div class="num">2</div><h3>Тұлға типі</h3><p>Сенің басым бағыттарың — RIASEC моделі бойынша профиль.</p></div>
+          <div class="step"><div class="num">3</div><h3>Мамандықтар</h3><p>Профиліңе сай мамандықтар, сұраныс пен қажет пәндер.</p></div>
+          <div class="step"><div class="num">4</div><h3>Жоспар</h3><p>Келесі қадам: қай пәндерді күшейту, қайда оқу керек.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="kicker">Айырмашылығымыз</div>
+      <h2 class="title">Балл емес — адам</h2>
+      <p class="sub">Көптеген сервистер ҰБТ баллын университетке байлайды. Біз тереңірек бастаймыз.</p>
+      <div class="compare">
+        <div class="card them">
+          <div class="tag">Қалыпты тәсіл</div>
+          <h3>Балл → университет</h3>
+          <ul>
+            <li><span class="ic">◦</span> Оқушы алдымен баллын біледі</li>
+            <li><span class="ic">◦</span> Балл жететін университетті таңдайды</li>
+            <li><span class="ic">◦</span> Мамандық — қалдық принципімен</li>
+            <li><span class="ic">◦</span> «Ұнай ма?» деген сұрақ қойылмайды</li>
+          </ul>
+        </div>
+        <div class="card us">
+          <div class="tag">Кім болам? тәсілі</div>
+          <h3>Адам → мамандық → жол</h3>
+          <ul>
+            <li><span class="ic">✦</span> Оқушы алдымен өзін таниды</li>
+            <li><span class="ic">✦</span> Табиғатына сай мамандық ашылады</li>
+            <li><span class="ic">✦</span> Содан кейін пән мен университет жоспарланады</li>
+            <li><span class="ic">✦</span> Мотивация ішкі қалаудан туады</li>
+          </ul>
+        </div>
+      </div>
+      <div class="center mt">
+        <button class="btn btn-gold" onclick="goGate()">Өзіңнен баста →</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <div class="quote-band">
+        <div class="quote-mark">"</div>
+        <p class="quote-text">Өмірде өмірлік жар таңдауды қоспағанда, мамандық таңдаудан маңыздырақ қадам жоқ. Адам өмірін арнайтын ісін — мамандығын, кәсібін, саудасын немесе қызмет түрін — саналы түрде таңдау және сол салада шеберлікке жету — бұл жас ұрпақ үшін де, бүкіл қоғам үшін де аса маңызды мәселе.</p>
+        <div class="quote-author">
+          <span class="quote-avatar">FP</span>
+          <div class="quote-name"><b>Фрэнк Парсонс</b><span>Кәсіби бағдар берудің (профориентация) негізін қалаушы</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ GATE (сынып / аты-жөні / промокод) ============ -->
+<main id="gate" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="panel" style="max-width:520px">
+        <div class="sec-label">Тестке кіру</div>
+        <div class="q" style="font-size:22px;margin-bottom:24px">Алдымен өзің туралы жаз</div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <input id="gateClass" class="gate-input" type="text" placeholder="Сынып (мыс. 9 «Ә»)">
+          <input id="gateName" class="gate-input" type="text" placeholder="Аты-жөнің">
+          <input id="gateCode" class="gate-input" type="text" placeholder="Промокод" style="text-transform:uppercase">
+          <div id="gateError" style="color:var(--pink-dk);font-weight:800;font-size:14px;display:none"></div>
+          <button class="btn btn-gold" id="gateBtn" onclick="submitGate()" style="justify-content:center">Тестті бастау</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ TEST ============ -->
+<main id="test" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="panel">
+        <div class="sec-label" id="secLabel"></div>
+        <div class="progress"><i id="pbar"></i></div>
+        <div class="pcount" id="pcount">1 / 72 сұрақ</div>
+        <div class="sec-prompt" id="secPrompt"></div>
+        <div class="q" id="qtext"></div>
+        <div class="likert" id="likert"></div>
+        <button class="backlink" id="backBtn" onclick="prevQ()">← Алдыңғы сұрақ</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ RESULTS (INDIVIDUAL REPORT) ============ -->
+<main id="results" class="hidden">
+  <section class="block report">
+    <div class="wrap">
+      <div class="report-bar no-print">
+        <div class="rb-left">
+          <span class="rb-tag">Жеке кәсіби есеп</span>
+          <input id="stuName" type="text" placeholder="Аты-жөнің" oninput="setName()">
+          <span id="saveStatus" style="font-size:13px;font-weight:800;color:var(--green-dk)"></span>
+        </div>
+        <button class="btn btn-ghost rb-print no-print" style="color:var(--ink);border-color:var(--line)" onclick="downloadPDF()">⭳ PDF жүктеу</button>
+      </div>
+
+      <!-- 1. PROFILE -->
+      <div class="result-head">
+        <div class="rh-name" id="rhName"></div>
+        <div class="code" id="rcode"></div>
+        <h2 id="rname"></h2>
+        <p id="rdesc"></p>
+        <div class="bars" id="rbars"></div>
+      </div>
+
+      <!-- 2. STRENGTHS (detailed) -->
+      <div class="rsection">
+        <div class="sec-num">01</div>
+        <h2 class="sec-title">Күшті жақтарың</h2>
+        <p class="sec-lead">Мына қасиеттер сенде табиғи күшті. Оларды мектепте қалай көрсетіп, дамытуға болатынын қарап шық.</p>
+        <div id="rstrongDetail"></div>
+      </div>
+
+      <!-- 3. COMBO -->
+      <div class="rsection">
+        <div class="sec-num">02</div>
+        <h2 class="sec-title">Бағыттарыңның тіркесімі</h2>
+        <p class="sec-lead">Екі басым бағытың бірге ерекше күш береді — дәл осы тіркесім сені бөлектейді.</p>
+        <div class="rcard combo" id="rcombo"></div>
+      </div>
+
+      <!-- 4. PORTRAIT NARRATIVE -->
+      <div class="rsection">
+        <div class="sec-num">03</div>
+        <h2 class="sec-title">Сенің портретің</h2>
+        <p class="sec-lead">Профиліңе қарай — оқуда, адамдармен, идеялармен және болашақпен қалай әрекет ететінің.</p>
+        <div class="narr" id="rnarr"></div>
+      </div>
+
+      <!-- INTEREST vs CONFIDENCE -->
+      <div class="rsection">
+        <div class="sec-num">04</div>
+        <h2 class="sec-title">Бейімділік — еңбек нысаны (Климов)</h2>
+        <p class="sec-lead">Климов тесті сені еңбектің нысанына қарай бөледі: табиғат, техника, адам, таңбалық жүйе, көркем бейне. Бұл — қызығушылығыңды екінші қырынан көрсету.</p>
+        <div class="rcard cmp"><div id="rcompare"></div><div class="cmp-note" id="rcompareNote"></div></div>
+      </div>
+
+      <!-- VALUES -->
+      <div class="rsection">
+        <div class="sec-num">05</div>
+        <h2 class="sec-title">Holland мен Климовтың үйлесімі</h2>
+        <p class="sec-lead">Екі тәуелсіз тест бір бағытты көрсетсе — нәтижеге сенім жоғары. Қайшы келсе — әлі ізденіс керек. Дәл осы «дұрыс нәтиженің» кепілі.</p>
+        <div class="rcard val"><div class="bars" id="rvalues"></div><p class="val-note" id="rvaluesNote"></p></div>
+      </div>
+
+      <!-- 6. WATCH-OUTS -->
+      <div class="rsection">
+        <div class="sec-num">06</div>
+        <h2 class="sec-title">Мінезің мен жұмыс стилі (MBTI)</h2>
+        <p class="sec-lead">MBTI мамандық таңдамайды — ол таңдаған бағытыңның ішінде саған қандай рөл мен орта жақын екенін көрсетеді.</p>
+        <div class="rcard wat"><ul id="rwatch"></ul></div>
+        <div class="rcard env" id="renv"></div>
+      </div>
+
+      <!-- 7. PROFESSIONS -->
+      <div class="rsection">
+        <div class="sec-num">07</div>
+        <h2 class="sec-title">Саған сай мамандықтар</h2>
+        <p class="sec-lead">Профиліңе жақындығы бойынша реттелген. Пайыз — қаншалықты сай келетінінің көрсеткіші (117 ресми БББТ мамандығы негізінде есептелген).</p>
+        <div class="ranked" id="rjobs"></div>
+      </div>
+
+      <!-- 7b. BROADER AI SUGGESTIONS (117 тізіміне шектелмейді, есептеу емес — AI пікірі) -->
+      <div class="rsection no-print">
+        <div class="sec-num">＋</div>
+        <h2 class="sec-title">Кеңірек қарасаң</h2>
+        <p class="sec-lead">Бұл — 117 ресми мамандықпен шектелмейтін, кеңірек нарықтағы рөлдер бойынша AI-дің пікірі. Есептелген нәтиже емес, қосымша идея ретінде қара.</p>
+        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)" id="broadBtn" onclick="loadBroadSuggestions()">Кеңірек қара →</button>
+        <div id="broadList" style="margin-top:20px"></div>
+      </div>
+
+      <!-- 8. LEAST SUITABLE -->
+      <div class="rsection">
+        <div class="sec-num">08</div>
+        <h2 class="sec-title">Қазір азырақ сай салалар</h2>
+        <p class="sec-lead">Бұл — «саған болмайды» деген емес. Тек қазіргі қалауыңа алысырақ. Қаласаң, дамытуға да болады.</p>
+        <div class="ranked muted-rank" id="rleast"></div>
+      </div>
+
+      <!-- 9. SUBJECTS + PLAN -->
+      <div class="rsection">
+        <div class="sec-num">09</div>
+        <h2 class="sec-title">Даму жоспарың</h2>
+        <p class="sec-lead">Мамандыққа жақындау үшін нақты қадамдар.</p>
+        <div class="two">
+          <div class="rcard subj"><h3>📚 Күшейтетін пәндер</h3><div id="rsubj"></div></div>
+          <div class="rcard steps"><h3>🧭 Келесі қадамдарың</h3><ul class="checklist" id="rsteps"></ul></div>
+        </div>
+        <div class="rcard dev" id="rdev"></div>
+      </div>
+
+      <!-- 10. REFLECTION -->
+      <div class="rsection">
+        <div class="sec-num">10</div>
+        <h2 class="sec-title">Өзіңе қоятын сұрақтар</h2>
+        <div class="rcard quest">
+          <ul id="rquest"></ul>
+          <p class="quest-note">Бұл есеп — үкім емес, әңгіме бастайтын құрал. Жауаптарыңды ата-анаңмен немесе мұғаліммен талқыла.</p>
+        </div>
+      </div>
+
+      <!-- CLOSING -->
+      <div class="closing">
+        <p class="cl-quote">«Алға жүру үшін өткеніңді біл, өзіңді таны.»</p>
+        <p class="cl-text" id="rclose"></p>
+        <div class="cl-brand">Кім болам? · сенің жолың осыдан басталады</div>
+      </div>
+
+      <div class="center mt2 no-print">
+        <button class="btn btn-gold" onclick="goGate()">Тестті қайта өту</button>
+        <button class="btn btn-ghost" style="color:var(--ink);border-color:var(--line)" onclick="go('catalog')">Барлық мамандық</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ CATALOG ============ -->
+<main id="catalog" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="kicker">Мамандықтар каталогы · БББТ</div>
+      <h2 class="title">Қазақстанның 117 мамандығы</h2>
+      <p class="sub">Ресми БББТ тізімі: әр мамандықтың коды, атауы, ҰБТ таңдау пәні және тұлға бағыты. Бағыт бойынша сүзіп, іздеп таңда.</p>
+      <input id="catSearch" type="text" placeholder="Мамандық іздеу (мыс. IT, дизайн, медицина)…" oninput="renderCatalog()">
+      <div class="filters" id="filters"></div>
+      <div class="cat-count" id="catCount"></div>
+      <div class="grid-jobs" id="cjobs"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ UNIVERSITIES ============ -->
+<main id="unis" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="kicker">Университеттер</div>
+      <h2 class="title">Қазақстанның 100 университеті</h2>
+      <p class="sub">Ресми тізім: атауы, коды және орналасқан қаласы. Қала немесе атау бойынша іздей аласың.</p>
+      <input id="uniSearch" type="text" placeholder="Университет немесе қала іздеу…" oninput="renderUnis()">
+      <div class="cat-count" id="uniCount"></div>
+      <div class="uni-grid" id="uniList"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ TEACHER ============ -->
+<main id="teacher" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="kicker">Мұғалім кабинеті · демо</div>
+      <h2 class="title">9 «Ә» сыныбы</h2>
+      <p class="sub">Сынып бойынша тест нәтижелері. Қай оқушыға жеке кеңес керегін бір қарағанда көресіз.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="n">28</div><div class="l">оқушы тіркелген</div></div>
+        <div class="stat"><div class="n g">24</div><div class="l">тестті аяқтады</div></div>
+        <div class="stat"><div class="n">Кәсіпкер</div><div class="l">басым бағыт</div></div>
+        <div class="stat"><div class="n g">6</div><div class="l">кеңес қажет</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Оқушы</th><th>Тұлға типі</th><th>Топ мамандық</th><th>Күй</th></tr></thead>
+        <tbody id="teacherRows"></tbody>
+      </table>
+      <div class="note">
+        <span>ℹ️</span>
+        <div><b>Демо деректер.</b> Нақты нұсқада мұғалім класс кодын береді, оқушылар тіркеледі, ал нәтижелер осында автоматты түрде жиналады.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ PARENT ============ -->
+<main id="parent" class="hidden">
+  <section class="block">
+    <div class="wrap">
+      <div class="kicker">Ата-анаға</div>
+      <h2 class="title">Баланың нәтижесін қалай оқу керек</h2>
+      <p class="sub">Тест — үкім емес, әңгіме бастайтын құрал. Мына қадамдар баламен дұрыс сөйлесуге көмектеседі.</p>
+      <div class="adv">
+        <div class="card"><div class="ico">🧭</div><h3>Типті таңба ретінде қарамаңыз</h3><p>«Сен — кәсіпкерсің» деп жапсырмаңыз. Бұл — басым бағыт, шектеу емес. Бала уақыт өте өзгереді.</p></div>
+        <div class="card"><div class="ico">💬</div><h3>Сұрақ қойыңыз</h3><p>«Неге бұл мамандық қызық?» деп сұраңыз. Жауаптан баланың нақты құндылығын түсінесіз.</p></div>
+        <div class="card"><div class="ico">🌱</div><h3>Тәжірибе беріңіз</h3><p>Ұнаған саладан бір күндік тәжірибе, экскурсия немесе әңгіме ұйымдастырыңыз.</p></div>
+        <div class="card"><div class="ico">⚖️</div><h3>Өз арманыңызды таңбаңыз</h3><p>Ата-ананың қалауы мен баланың табиғаты сәйкес келмеуі мүмкін. Баланы тыңдаңыз.</p></div>
+      </div>
+      <div class="center mt">
+        <button class="btn btn-gold" onclick="goGate()">Баламен бірге тест өтіңіз</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="logo">
+      <svg class="mark" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="9" fill="#12A3B4"/>
+        <path d="M8 23 C 12 12, 20 20, 24 9" stroke="#E9A83A" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+        <circle cx="8" cy="23" r="2.6" fill="#FBF7EF"/><circle cx="24" cy="9" r="2.6" fill="#E9A83A"/>
+      </svg>
+      Кім болам?
+    </div>
+    <small>Прототип · тұлға типі → мамандық → жол. Әдістеме: Holland + Климов + Юнг типологиясы негізінде.</small>
+  </div>
+</footer>
+
+<!-- AI кеңесші widget — MVP-де жасырылған (backend әлі деплой етілмеген).
+     Іске қосу үшін class="hidden" алып тастау жеткілікті. -->
+<button id="aiFab" class="hidden" onclick="toggleAI()" title="AI кеңесші">💬</button>
+<div id="aiPanel">
+  <div class="ai-head">
+    <div>
+      <b>AI кеңесші</b>
+      <span>Сенің профиліңе сай сұрақ қой</span>
+    </div>
+    <button class="ai-close" onclick="toggleAI()">✕</button>
+  </div>
+  <div class="ai-body" id="aiBody"></div>
+  <div class="ai-note">Кеңес — шешім қолдау құралы, үкім емес. Маңызды таңдауды ата-анаң/мұғаліміңмен талқыла.</div>
+  <div class="ai-foot">
+    <textarea id="aiInput" placeholder="Сұрағыңды жаз..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI();}"></textarea>
+    <button class="ai-send" id="aiSendBtn" onclick="sendAI()">➤</button>
+  </div>
+</div>
+
+<script>
+/* ---------- AI КЕҢЕСШІ CONFIG ----------
+   localhost-те автоматты түрде локал Docker backend-ке (docker-compose) қосылады.
+   Деплойдан кейін тек PROD_API_BASE-ті нақты Vercel URL-іңізге ауыстыру керек. */
+const PROD_API_BASE = 'https://YOUR-DEPLOY-URL.vercel.app';
+const API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3000'
+  : PROD_API_BASE;
+const AI_API_URL = API_BASE + '/api/chat';
+const SAVE_RESULT_URL = API_BASE + '/api/save-result';
+
+/* ---------- GOOGLE SHEETS (жедел іске қосу, Vercel/Supabase-сіз) ----------
+   google-sheets-integration/README.md бойынша Apps Script деплой етіп,
+   осында нақты Web app URL-ды қойыңыз. */
+const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxhwyPe1ZUP7m5qrrO52CbVJonWXdQ1xGnO4QtU8vOHSgiqdjWrwcwFt5LTpx2zAb2W/exec';
+
+let aiProfile = null;      // соңғы есептелген профиль (showResults() толтырады)
+let aiMessages = [];       // {role:'user'|'assistant', content}
+let aiBusy = false;
+
+let resultPayload = null;     // showResults() толтырады — Google Sheets-ке жіберілетін дерек
+let gateProfile = null;       // {className, studentName, promoCode} — submitGate() толтырады
+let savedThisSession = false; // бір тест нәтижесі бір рет қана сақталады
+
+function goGate(){
+  document.getElementById('gateError').style.display = 'none';
+  go('gate');
+}
+
+async function submitGate(){
+  const className = (document.getElementById('gateClass').value||'').trim();
+  const studentName = (document.getElementById('gateName').value||'').trim();
+  const promoCode = (document.getElementById('gateCode').value||'').trim().toUpperCase();
+  const errEl = document.getElementById('gateError');
+  errEl.style.display = 'none';
+
+  if(!className || !studentName || !promoCode){
+    errEl.textContent = 'Барлық өрісті толтыр.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('gateBtn');
+  btn.disabled = true; btn.textContent = 'Тексерілуде...';
+
+  try{
+    const res = await fetch(SHEETS_WEBAPP_URL + '?action=checkCode&code=' + encodeURIComponent(promoCode));
+    const data = await res.json();
+    if(!data.valid){
+      errEl.textContent = data.reason === 'used' ? 'Бұл промокод бұрын қолданылған.' : 'Промокод дұрыс емес.';
+      errEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Тестті бастау';
+      return;
+    }
+  } catch(e){
+    errEl.textContent = 'Байланыс қатесі. Интернетті тексеріп, қайта көр.';
+    errEl.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Тестті бастау';
+    return;
+  }
+
+  gateProfile = { className, studentName, promoCode };
+  btn.disabled = false; btn.textContent = 'Тестті бастау';
+  startTest();
+}
+
+async function submitToSheet(){
+  if(savedThisSession || !resultPayload || !gateProfile) return;
+  const statusEl = document.getElementById('saveStatus');
+  statusEl.textContent = 'Сақталуда...';
+  try{
+    const res = await fetch(SHEETS_WEBAPP_URL, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'submitResult', ...gateProfile, ...resultPayload })
+    });
+    const data = await res.json();
+    if(data.ok){ savedThisSession = true; statusEl.textContent = '✓ Сақталды'; }
+    else { statusEl.textContent = ''; }
+  } catch(e){
+    statusEl.textContent = '';
+  }
+}
+
+async function loadBroadSuggestions(){
+  if(!resultPayload) return;
+  const btn = document.getElementById('broadBtn');
+  const box = document.getElementById('broadList');
+  btn.disabled = true; btn.textContent = 'Жүктелуде...';
+  box.innerHTML = '';
+  try{
+    const res = await fetch(SHEETS_WEBAPP_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        action: 'suggestBroad',
+        hollandCode: resultPayload.hollandCode,
+        klimovTop: resultPayload.klimovTop,
+        mbtiType: resultPayload.mbtiType,
+      })
+    });
+    const data = await res.json();
+    if(!data.ok || !data.list || !data.list.length){
+      box.innerHTML = '<p style="color:var(--muted);font-weight:700">Әзірге жүктелмеді. Кейінірек қайталап көр.</p>';
+    } else {
+      box.innerHTML = data.list.map(item=>
+        '<div class="job" style="margin-bottom:12px"><h3>'+item.n+'</h3><p>'+(item.why||'')+'</p></div>'
+      ).join('');
+    }
+  } catch(e){
+    box.innerHTML = '<p style="color:var(--muted);font-weight:700">Байланыс қатесі. Кейінірек қайталап көр.</p>';
+  }
+  btn.disabled = false; btn.textContent = 'Қайта жүктеу →';
+}
+
+function downloadPDF(){
+  const el = document.querySelector('#results .report');
+  const filename = (gateProfile ? gateProfile.studentName.replace(/\s+/g,'_') : 'natizhe') + '_kimbolam.pdf';
+  document.body.classList.add('pdf-export');
+  html2pdf().set({
+    margin: [10,10],
+    filename,
+    image: { type:'jpeg', quality:0.95 },
+    html2canvas: { scale:2, useCORS:true },
+    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
+    pagebreak: { mode:['css','legacy'] }
+  }).from(el).save().then(()=>{
+    document.body.classList.remove('pdf-export');
+  });
+}
+
+function toggleAI(){
+  const p = document.getElementById('aiPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open') && aiMessages.length===0) aiGreet();
+}
+function aiGreet(){
+  const name = aiProfile && aiProfile.hollandNames ? aiProfile.hollandNames.split(',')[0] : null;
+  const greet = name
+    ? `Сәлем! Мен сенің AI кеңесшіңмін. Тест нәтижең бойынша сен «${name}» бағытына жақынсың. Мамандық, оқу бағыты немесе нәтижең туралы не сұрағың келеді?`
+    : `Сәлем! Мен AI кеңесшімін — мамандық таңдау туралы кез келген сұрағыңды қоя аласың. Алдымен тестті тапсырсаң, кеңесім дәлірек болады 🙂`;
+  aiAppend('bot', greet);
+}
+function aiAppend(role, text){
+  const body = document.getElementById('aiBody');
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + (role==='user'?'user':'bot');
+  div.textContent = text;
+  body.appendChild(div);
+  body.scrollTop = body.scrollHeight;
+  return div;
+}
+async function sendAI(){
+  if(aiBusy) return;
+  const inp = document.getElementById('aiInput');
+  const text = inp.value.trim();
+  if(!text) return;
+  inp.value='';
+  aiAppend('user', text);
+  aiMessages.push({role:'user', content:text});
+  aiBusy = true;
+  document.getElementById('aiSendBtn').disabled = true;
+  const typingEl = document.createElement('div');
+  typingEl.className = 'ai-msg typing';
+  typingEl.textContent = 'Жазып жатыр...';
+  document.getElementById('aiBody').appendChild(typingEl);
+  document.getElementById('aiBody').scrollTop = 9e9;
+
+  try{
+    const res = await fetch(AI_API_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ profile: aiProfile, messages: aiMessages })
+    });
+    const data = await res.json();
+    typingEl.remove();
+    if(!res.ok || !data.reply){
+      aiAppend('bot', data.error || 'Кешіріңіз, қате шықты. Кейінірек қайталап көр.');
+    } else {
+      aiAppend('bot', data.reply);
+      aiMessages.push({role:'assistant', content:data.reply});
+    }
+  } catch(e){
+    typingEl.remove();
+    aiAppend('bot', 'Байланыс қатесі. Интернетіңді тексеріп, қайта көр.');
+  }
+  aiBusy = false;
+  document.getElementById('aiSendBtn').disabled = false;
+}
+</script>
+<script>
+/* ---------- NAVIGATION ---------- */
+const views = ['home','gate','test','results','catalog','unis','teacher','parent'];
+function go(v){
+  views.forEach(x=>document.getElementById(x).classList.toggle('hidden', x!==v));
+  document.querySelectorAll('.navlinks button[data-nav]').forEach(b=>
+    b.classList.toggle('active', b.dataset.nav===v));
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ---------- TYPE MODEL (RIASEC) ---------- */
+const TYPES = {
+  R:{name:'Реалист · Іс-әрекет', kk:'Практик', desc:'Қолмен, техникамен, нақты нәтижемен жұмыс істеуді ұнатады. Теорияға қарағанда істеп көруді таңдайды.',
+     strong:['Нақты нәтижеге бағытталу','Практикалық ойлау','Техника мен құралды меңгеру'],
+     watch:['Ұзақ теорияға шыдамсыздық','Сезімді сөзбен жеткізу қиынырақ'],
+     env:'Қимыл, техника, нақты нәтиже бар орта саған қолайлы — бір орында ұзақ отыру жалықтырады.',
+     grow:'Практикалық дағдыны жоспарлы дамыт: жоба, шеберхана, зертхана жұмыстары.',
+     ex:'Сынып жобасында макет, құрылғы немесе қолмен жасалатын бөлікті өз мойныңа аласың.',
+     apply:'Теорияны бірден тәжірибеде қолдан — зертхана, шеберхана, техникалық үйірме.',
+     learn:'Істеп көру арқылы жақсы үйренесің — қолмен, тәжірибемен, көзбен көріп.',
+     people:'Артық сөзден гөрі бірге іс тындырып сенім орнатасың.',
+     ideas:'Идеяны нақты, жүзеге асатын шешімге айналдырасың.',
+     future:'Алыс жоспардан гөрі нақты, көрінетін қадамдарды таңдайсың.'},
+  I:{name:'Зерттеуші · Ойлау', kk:'Аналитик', desc:'Себеп-салдарды түсінуді, талдау мен зерттеуді сүйеді. Сұрақ қоюдан жалықпайды.',
+     strong:['Терең талдау','Логика мен жүйелі ойлау','Жаңа білімге құштарлық'],
+     watch:['Шешім қабылдауды созу','Артық талдап, әрекетке кешігу'],
+     env:'Ойлауға уақыт беретін, күрделі мәселелер бар орта саған жарасады.',
+     grow:'Талдау дағдыңды күшейт: зерттеу жоба, ғылыми үйірме, олимпиада.',
+     ex:'Қиын есептің шешімін өзгеше жолмен тауып, сыныпқа түсіндіресің.',
+     apply:'Күрделі тақырыпты терең қаз — зерттеу жобасы, олимпиада, ғылыми үйірме.',
+     learn:'Себебін түсінбейінше жаттамайсың — логика мен мәнге сүйенесің.',
+     people:'Аз сөйлеп, ойланып пікір айтасың; терең әңгімені ұнатасың.',
+     ideas:'Мәселені бөлшектеп талдап, түбіне жетесің.',
+     future:'Шешім қабылдамас бұрын барлық деректі зерттегің келеді.'},
+  A:{name:'Шығармашыл · Өнер', kk:'Креатор', desc:'Идея, форма, эстетика әлемінде өзін еркін сезінеді. Стандартты шешімдерден жалығады.',
+     strong:['Идея генерациясы','Эстетикалық сезім','Қалыптан тыс ойлау'],
+     watch:['Монотонды іске шыдамсыздық','Сынды жеке қабылдау'],
+     env:'Еркіндік пен өзін-өзі білдіруге орын бар орта саған керек.',
+     grow:'Шығармашылықты тәжірибеге айналдыр: портфолио, жоба, көрме.',
+     ex:'Жобаны басқалардан бөлек, өзіндік шығармашыл түрде ұсынасың.',
+     apply:'Идеяларыңды нақты жұмысқа айналдыр — портфолио, көрме, байқау.',
+     learn:'Бейне, түс, форма арқылы жақсы есте сақтайсың.',
+     people:'Шынайылық пен өзіндік стильді бағалайсың.',
+     ideas:'Стандартты жолдан тыс, жаңа идея тудырасың.',
+     future:'Болашақты қалыпты емес, өзіндік көзқараспен елестетесің.'},
+  S:{name:'Әлеуметтік · Қарым-қатынас', kk:'Көмекші', desc:'Адамдармен жұмыс істеуді, оқытуды, көмектесуді ұнатады. Эмпатиясы күшті.',
+     strong:['Эмпатия','Қарым-қатынас','Оқыту мен қолдау'],
+     watch:['Өз шекараңды ұстау','«Жоқ» деуге қиналу'],
+     env:'Адамдармен тығыз жұмыс, көмек пен даму бар орта саған сай.',
+     grow:'Коммуникация мен көшбасшылықты дамыт: волонтёрлік, тәлімгерлік.',
+     ex:'Түсінбеген сыныптасыңа сабақты шыдаммен түсіндіресің.',
+     apply:'Коммуникацияңды дамыт — тәлімгерлік, волонтёрлік, топ жетекшісі.',
+     learn:'Талқылап, басқаға түсіндіру арқылы жақсы меңгересің.',
+     people:'Айналаңдағылардың көңіл-күйін тез сезіп, қолдау бересің.',
+     ideas:'Идеяны адамдарға қалай пайдалы болатыны тұрғысынан бағалайсың.',
+     future:'Болашақты адамдарға көмектесу, оларды дамыту арқылы көресің.'},
+  E:{name:'Кәсіпкер · Басқару', kk:'Көшбасшы', desc:'Ұйымдастыруды, сендіруді, тәуекелді ұнатады. Нәтиже мен әсерге ұмтылады.',
+     strong:['Ұйымдастыру','Сендіру','Тәуекелге даярлық'],
+     watch:['Асығыс шешім','Ұсақ деталь елемеу'],
+     env:'Бастама, ықпал, нәтиже көрінетін орта саған қолайлы.',
+     grow:'Көшбасшылықты машықта: жоба жетекшісі, клуб, шағын бизнес.',
+     ex:'Топтық жобада бастама көтеріп, рөлдерді бөлесің.',
+     apply:'Көшбасшылықты машықта — оқушы клубы, жоба, шағын кәсіп.',
+     learn:'Мақсат пен нәтиже айқын болса, жылдам үйренесің.',
+     people:'Адамдарды бір мақсатқа сендіріп, соңыңнан ертесің.',
+     ideas:'Идеяны тез әрекетке айналдырып, нәтижеге жеткізесің.',
+     future:'Үлкен мақсат қойып, оған жетуді жоспарлайсың.'},
+  C:{name:'Жүйелі · Тәртіп', kk:'Ұйымдастырушы', desc:'Реттілік, дәлдік, жүйе ұнайды. Деректермен, ережемен, құрылыммен жұмыс істейді.',
+     strong:['Реттілік пен дәлдік','Жоспарлау','Деректермен жұмыс'],
+     watch:['Өзгеріске бейімделу қиынырақ','Артық перфекционизм'],
+     env:'Айқын ереже, құрылым, нақты міндет бар орта саған қолайлы.',
+     grow:'Жүйелілікті күшейт: есеп, кесте, жобаны басқару дағдысы.',
+     ex:'Топ жұмысында кесте, жоспар мен тапсырма бөлінісін ұйымдастырасың.',
+     apply:'Жүйелілігіңді қолдан — жоспарлаушы, есеп жүргізу, дерекпен жұмыс.',
+     learn:'Реттелген, кезең-кезеңімен берілген материалды жақсы меңгересің.',
+     people:'Уәдеңде тұрып, сенімді серік боласың.',
+     ideas:'Идеяны нақты жоспарға, қадамдарға бөлесің.',
+     future:'Болашақты нақты жоспармен, тәртіппен құрасың.'}
+};
+
+/* ---------- TYPE-PAIR INSIGHTS ---------- */
+const COMBOS = {
+  'A|I':'Шығармашылық пен талдау қатар — идеяны ойлап қана қоймай, оны зерттеп негіздей аласың. UX-дизайн, сәулет, ғылыми журналистика жақын.',
+  'A|C':'Еркін қиял мен тәртіп үйлескен — идеяны жүйелі жеткізе аласың. Графикалық дизайн, режиссура, бренд-менеджмент.',
+  'A|E':'Идея мен оны ұсына білу қатар — креативті бизнес, жарнама, продюсерлік саған сай.',
+  'A|R':'Ой мен қол шеберлігі бірге — өнеркәсіптік дизайн, сәулет, қолданбалы өнер.',
+  'A|S':'Шығармашылық пен адаммен жұмыс — арт-терапия, мұғалім-суретші, мәдени жобалар.',
+  'C|E':'Тәртіп пен басқару — жоба менеджері, қаржы басқарушысы, әкімшілік көшбасшы.',
+  'C|I':'Дәлдік пен талдау — деректер талдаушысы, аудитор, аналитик-экономист.',
+  'C|R':'Жүйе мен қол еңбегі — логистика, инженер-технолог, сапа бақылаушысы.',
+  'C|S':'Реттілік пен адаммен жұмыс — HR маманы, әлеуметтік координатор, кеңсе басқарушысы.',
+  'E|I':'Батылдық пен ой тереңдігі — стратег, консультант, стартап негізін қалаушы.',
+  'E|R':'Іс-әрекет пен басқару — құрылыс жетекшісі, кәсіпкер-техник, өндіріс менеджері.',
+  'E|S':'Ықпал ету мен адаммен жұмыс — маркетинг, сату, қоғаммен байланыс, коуч.',
+  'I|R':'Ой мен қолмен жасау — инженер, зерттеуші-техник, IT-инженер.',
+  'I|S':'Түсіну мен көмек — дәрігер, психолог, ұстаз-ғалым.',
+  'R|S':'Нақты іс пен қамқорлық — ветеринар, құтқарушы, медбике, тренер.'
+};
+function comboKey(a,b){ return [a,b].sort().join('|'); }
+
+/* ---------- VALUE MODEL ---------- */
+/* ===== HOLLAND (RIASEC) — 36 items, 6 per type ===== */
+const HOLLAND_ITEMS = [
+  {k:'R',q:'Механизм не қозғалтқышты бөлшектеп, ақауын тауып жөндеу'},
+  {k:'R',q:'Ағаштан не металдан жиһаз я бұйым жасау'},
+  {k:'R',q:'Электр сымдарын не тұрмыстық техниканы орнату'},
+  {k:'R',q:'Бақшада не егістікте өсімдік өсіру'},
+  {k:'R',q:'Робот не электрондық құрылғы құрастыру'},
+  {k:'R',q:'Құрылыс алаңында не шеберханада қолмен жұмыс істеу'},
+  {k:'I',q:'Табиғаттағы бір құбылыстың себебін ғылыми жолмен зерттеу'},
+  {k:'I',q:'Күрделі математикалық есепті шығару'},
+  {k:'I',q:'Зертханада химиялық не биологиялық тәжірибе жүргізу'},
+  {k:'I',q:'Аурудың себебін анықтау үшін деректерді талдау'},
+  {k:'I',q:'Ғарыш, физика не генетика туралы ізденіс жасау'},
+  {k:'I',q:'Бір мәселені шешу үшін түрлі деректерді салыстырып, қорытынды шығару'},
+  {k:'A',q:'Сурет, иллюстрация не графикалық дизайн жасау'},
+  {k:'A',q:'Ән, күй немесе музыка шығару'},
+  {k:'A',q:'Әңгіме, өлең не сценарий жазу'},
+  {k:'A',q:'Спектакль, би не өнер қойылымында өнер көрсету'},
+  {k:'A',q:'Бөлме не ғимараттың көркем безендірілуін ойлап табу'},
+  {k:'A',q:'Видео түсіріп, монтаждап, өз идеяңды бейнелеу'},
+  {k:'S',q:'Оқушыға сабақты түсінікті етіп түсіндіру'},
+  {k:'S',q:'Науқасқа не қартқа күтім жасап, көмектесу'},
+  {k:'S',q:'Адамдарға кеңес беріп, мәселесін шешуге қолдау көрсету'},
+  {k:'S',q:'Балаларды оқытып, тәрбиелеу'},
+  {k:'S',q:'Ерікті (волонтёр) жобада мұқтаждарға көмектесу'},
+  {k:'S',q:'Топтағы адамдардың арасын жарастырып, келісімге келтіру'},
+  {k:'E',q:'Топты бастап, жобаны мақсатқа жеткізу'},
+  {k:'E',q:'Жаңа өнім не идеяны таныстырып, адамдарды сендіру'},
+  {k:'E',q:'Шағын бизнес не стартап ашып, басқару'},
+  {k:'E',q:'Тауар не қызметті сату, келіссөз жүргізу'},
+  {k:'E',q:'Іс-шара ұйымдастырып, командаға тапсырма бөлу'},
+  {k:'E',q:'Қоғамдық талқылауда өз ұстанымыңды дәлелдеп қорғау'},
+  {k:'C',q:'Деректерді кестеге түсіріп, жүйелеп реттеу'},
+  {k:'C',q:'Кіріс-шығысты не бюджетті есептеп жүргізу'},
+  {k:'C',q:'Құжаттарды тексеріп, қателерін түзету'},
+  {k:'C',q:'Қойма не тауар қозғалысын есепке алу'},
+  {k:'C',q:'Нақты нұсқаулық бойынша жұмысты дәл орындау'},
+  {k:'C',q:'Кестелер мен статистикамен ұқыпты жұмыс істеу'}
+];
+
+/* ===== KLIMOV (ДДО) — 20 forced-choice pairs =====
+   types: T=Табиғат X=Техника H=Адам Z=Таңба K=Көркем */
+const KLIMOV_PAIRS = [
+  [{t:'H',q:'Адамдарға кеңес беру, көмектесу'},{t:'X',q:'Құрылғы, механизмді жөндеу'}],
+  [{t:'T',q:'Өсімдік өсіріп, күтім жасау'},{t:'Z',q:'Сандар мен есептермен жұмыс істеу'}],
+  [{t:'K',q:'Сурет салу, дизайн жасау'},{t:'H',q:'Оқушыларды оқыту'}],
+  [{t:'X',q:'Робот не машина құрастыру'},{t:'K',q:'Ән, музыка шығару'}],
+  [{t:'Z',q:'Мәтіндегі қателерді тауып түзету'},{t:'T',q:'Жануарларды бағып, емдеу'}],
+  [{t:'H',q:'Ауру адамға күтім жасау'},{t:'Z',q:'Кестелер мен деректерді реттеу'}],
+  [{t:'X',q:'Электр не техникалық жабдықты орнату'},{t:'T',q:'Табиғатта, орманда жұмыс істеу'}],
+  [{t:'K',q:'Спектакль не қойылым дайындау'},{t:'Z',q:'Құжаттарды жүйелеп есепке алу'}],
+  [{t:'H',q:'Топты ұйымдастырып, адамдармен жұмыс істеу'},{t:'T',q:'Өсімдік не топырақты зерттеу'}],
+  [{t:'X',q:'Аспап-құралмен нақты бұйым жасау'},{t:'H',q:'Балаларды тәрбиелеу'}],
+  [{t:'Z',q:'Бағдарлама коды не формуламен жұмыс істеу'},{t:'K',q:'Видео түсіріп, монтаждау'}],
+  [{t:'T',q:'Жануарлардың мінезін бақылап зерттеу'},{t:'K',q:'Өлең не әңгіме жазу'}],
+  [{t:'H',q:'Науқасты тыңдап, қолдау көрсету'},{t:'X',q:'Көлік не механизмді жөндеу'}],
+  [{t:'Z',q:'Қаржы есебін жүргізу'},{t:'T',q:'Егін не бақша шаруашылығы'}],
+  [{t:'K',q:'Интерьер не киім дизайнын ойлап табу'},{t:'X',q:'Құрылыс не монтаж жұмысы'}],
+  [{t:'T',q:'Дәрілік өсімдіктерді зерттеу'},{t:'H',q:'Адамдарды бір мақсатқа жетелеу'}],
+  [{t:'Z',q:'Статистиканы талдап, есеп жасау'},{t:'K',q:'Жарнама не постер дизайнын жасау'}],
+  [{t:'X',q:'Механизмнің жұмысын жетілдіру'},{t:'Z',q:'Деректер базасын реттеу'}],
+  [{t:'H',q:'Мұқтаж адамдарға көмектесу'},{t:'K',q:'Сахнада өнер көрсету'}],
+  [{t:'T',q:'Экология не табиғатты қорғау'},{t:'X',q:'Жаңа құрылғы құрастыру'}]
+];
+
+/* ===== MBTI — 16 items, 4 per dimension =====
+   dim: EI/SN/TF/JP ; pole: which letter a HIGH (agree) score points to */
+const MBTI_ITEMS = [
+  {dim:'EI',pole:'E',q:'Менің ойымша, достарым мені белсенді және сөзшең деп сипаттар еді.'},
+  {dim:'EI',pole:'E',q:'Маған жалғыз қалғаннан гөрі, адамдармен уақыт өткізген ұнайды.'},
+  {dim:'EI',pole:'I',q:'Мен уақыттың көп бөлігінде жалғыз бола алатын жерде жұмыс істегенді қуана қабылдар едім.'},
+  {dim:'EI',pole:'I',q:'Мен адамдарға қоңырау шалғаннан гөрі, хабарлама жазғанды жөн көремін.'},
+  {dim:'SN',pole:'N',q:'Мен жиі стандартты шешімдердің орнына ерекше идеялар ойлап табамын.'},
+  {dim:'SN',pole:'N',q:'Маған жаңа идеялар мен көзқарастарды зерттеген ұнайды.'},
+  {dim:'SN',pole:'S',q:'Егер талқылауда нақты мысалдар мен практика болмаса, маған оны тыңдау қызықсыз.'},
+  {dim:'SN',pole:'S',q:'Мен абстрактілі философиялық ойлардан гөрі нақты нәрселерді талқылағанды жөн көремін.'},
+  {dim:'TF',pole:'T',q:'Мен шешім қабылдағанда эмоцияларға емес, ақпарат пен фактілерді талдауды дұрыс санаймын.'},
+  {dim:'TF',pole:'T',q:'Біреу маған эмоция арқылы әсер етуге тырысса, мен оған бой алдырмай, сабырлық танытамын.'},
+  {dim:'TF',pole:'F',q:'Мен шешім қабылдау кезінде логикадан гөрі адамдардың сезімдерін көбірек ескеремін.'},
+  {dim:'TF',pole:'F',q:'Мен біреуге сын айтқанда, оны ренжітпеу үшін мүмкіндігінше жұмсақ жеткізуге тырысамын.'},
+  {dim:'JP',pole:'J',q:'Мен істерді тізімдер мен кестелер арқылы жоспарлағанды ұнатамын.'},
+  {dim:'JP',pole:'J',q:'Мен тапсырмаларды соңғы сәтке қалдырмай, мүмкіндігінше ерте орындауға тырысамын.'},
+  {dim:'JP',pole:'P',q:'Мен қатаң кесте бойынша емес, көңіл-күйіме қарай әрекет еткенді ұнатамын.'},
+  {dim:'JP',pole:'P',q:'Мен көбінесе тапсырмаларды уақытында емес, соңғы сәтте орындаймын.'}
+];
+
+/* Klimov type kk labels + Holland bridge */
+const KLIMOV_TYPES = {
+  'Табиғат':{bridge:['R','I']}, 'Техника':{bridge:['R']}, 'Адам':{bridge:['S','E']},
+  'Таңба':{bridge:['C','I']}, 'Көркем':{bridge:['A']}
+};
+
+/* ---------- SCALES ---------- */
+const SCALE_INTEREST = [
+  {label:'Өте ұнайды', v:2},{label:'Ұнайды', v:1},{label:'Бейтарап', v:0},
+  {label:'Ұнамайды', v:-1},{label:'Мүлдем ұнамайды', v:-2}
+];
+const SCALE_AGREE = [
+  {label:'Толық келісемін', v:3},{label:'Келісемін', v:2},{label:'Сәл келісемін', v:1},
+  {label:'Бейтарап', v:0},{label:'Сәл келіспеймін', v:-1},{label:'Келіспеймін', v:-2},
+  {label:'Мүлдем келіспеймін', v:-3}
+];
+
+/* ---------- INTERIM NORMS (Holland; NEUTRAL until pilot data — no empirical basis yet for asymmetric correction on the new 36-item bank) ---------- */
+const NORM_BASE = {R:50, I:50, A:50, S:50, E:50, C:50};
+
+/* ---------- SECTIONS (3 tests) ---------- */
+const SECTIONS = [
+  {title:'Қызығушылық (Holland)', prompt:'Мына іс саған қаншалық ұнайды? (шеберлігіңе қарамай, тек қалауың бойынша)', scale:SCALE_INTEREST},
+  {title:'Бейімділік (Климов)',   prompt:'Екеуінің қайсысымен айналысқанды көбірек қалайсың?'},
+  {title:'Мінез (MBTI)',          prompt:'Бұл сен туралы қаншалық рас?', scale:SCALE_AGREE}
+];
+/* flatten into one ordered sequence */
+const FLOW = [];
+HOLLAND_ITEMS.forEach(it=>FLOW.push({sec:0, format:'rate', axis:'holland', k:it.k, q:it.q}));
+KLIMOV_PAIRS.forEach(p=>FLOW.push({sec:1, format:'pick', pair:p}));
+MBTI_ITEMS.forEach(it=>FLOW.push({sec:2, format:'rate', axis:'mbti', dim:it.dim, pole:it.pole, q:it.q}));
+
+/* ---------- REAL KZ SPECIALTIES (БББТ) + UNIVERSITIES ----------
+   Source: eduser lists. w = RIASEC affinity vector (initial rule-based mapping,
+   to be refined by the expert). subj = ҰБТ таңдау пәні. */
+const SPECIALTIES=[
+  {code:'B001',n:'Педагогика және психология',subj:'Биология – География',hol:'SIA',w:{S:3,I:2,A:1},klim:['Адам']},
+  {code:'B002',n:'Мектепке дейінгі оқыту және тәрбиелеу',subj:'Биология – География',hol:'SAC',w:{S:3,A:2,C:1},klim:['Адам','Көркем']},
+  {code:'B003',n:'Бастауышта оқыту педагогикасы мен әдістемесі',subj:'Биология – География',hol:'SAC',w:{S:3,A:2,C:1},klim:['Адам','Көркем']},
+  {code:'B004',n:'Бастапқы әскери дайындық мұғалімдерін даярлау',subj:'Шығармашылық',hol:'RSE',w:{R:3,S:2,E:1},klim:['Адам','Техника']},
+  {code:'B005',n:'Дене шынықтыру мұғалімдерін даярлау',subj:'Шығармашылық',hol:'SRE',w:{S:3,R:2,E:1},klim:['Адам']},
+  {code:'B006',n:'Музыка мұғалімдерін даярлау',subj:'Шығармашылық',hol:'ASC',w:{A:3,S:2,C:1},klim:['Көркем','Адам']},
+  {code:'B007',n:'Көркем еңбек және сызу мұғалімдерін даярлау',subj:'Шығармашылық',hol:'ARS',w:{A:3,R:2,S:1},klim:['Көркем','Техника','Адам']},
+  {code:'B008',n:'Құқық және экономика негіздері мұғалімдерін даярлау',subj:'Дж. тарихы – География',hol:'SEC',w:{S:3,E:2,C:1},klim:['Адам','Таңба']},
+  {code:'B009',n:'Математика мұғалімдерін даярлау',subj:'Математика – Физика',hol:'SIC',w:{S:3,I:2,C:1},klim:['Адам','Таңба']},
+  {code:'B010',n:'Физика мұғалімдерін даярлау',subj:'Математика – Физика',hol:'SIR',w:{S:3,I:2,R:1},klim:['Адам','Таңба']},
+  {code:'B011',n:'Информатика мұғалімдерін даярлау',subj:'Математика – Информатика',hol:'SIC',w:{S:3,I:2,C:1},klim:['Адам','Таңба']},
+  {code:'B012',n:'Химия мұғалімдерін даярлау',subj:'Биология – Химия',hol:'SIR',w:{S:3,I:2,R:1},klim:['Адам','Табиғат']},
+  {code:'B013',n:'Биология мұғалімдерін даярлау',subj:'Биология – Химия',hol:'SIR',w:{S:3,I:2,R:1},klim:['Адам','Табиғат']},
+  {code:'B014',n:'География мұғалімдерін даярлау',subj:'Дж. тарихы – География',hol:'SIC',w:{S:3,I:2,C:1},klim:['Адам','Табиғат']},
+  {code:'B015',n:'Гуманитарлық пәндер мұғалімдерін даярлау (Тарих)',subj:'Дж. тарихы – География',hol:'SAE',w:{S:3,A:2,E:1},klim:['Адам','Таңба']},
+  {code:'B016',n:'Қазақ тілі мен әдебиеті мұғалімдерін даярлау',subj:'Қаз. Тілі – Қаз. Әдебиеті',hol:'SAE',w:{S:3,A:2,E:1},klim:['Адам','Таңба']},
+  {code:'B017',n:'Орыс тілі мен әдебиеті мұғалімдерін даярлау',subj:'Орыс. Тілі – Орыс. Әдебиеті',hol:'SAE',w:{S:3,A:2,E:1},klim:['Адам','Таңба']},
+  {code:'B018',n:'Шет тілі мұғалімдерін даярлау (екі шетел тілі)',subj:'Шет тілі – Дж. тарихы',hol:'SAE',w:{S:3,A:2,E:1},klim:['Адам','Таңба']},
+  {code:'B019',n:'Әлеуметтік педагогтарды даярлау',subj:'Биология – География',hol:'SEA',w:{S:3,E:2,A:1},klim:['Адам']},
+  {code:'B020',n:'Арнайы педагогика (Дефектология)',subj:'Биология – География',hol:'SIA',w:{S:3,I:2,A:1},klim:['Адам']},
+  {code:'B021',n:'Орындаушылық өнер',subj:'Шығармашылық',hol:'A',w:{A:3},klim:['Көркем']},
+  {code:'B023',n:'Режиссура, арт-менеджмент',subj:'Шығармашылық',hol:'AE',w:{A:3,E:2},klim:['Көркем','Адам']},
+  {code:'B027',n:'Театр өнері',subj:'Шығармашылық',hol:'A',w:{A:3},klim:['Көркем']},
+  {code:'B028',n:'Хореография',subj:'Шығармашылық',hol:'AR',w:{A:3,R:2},klim:['Көркем']},
+  {code:'B029',n:'Аудиовизуалды өнер және медиа өндіріс',subj:'Шығармашылық',hol:'A',w:{A:3},klim:['Көркем','Таңба']},
+  {code:'B030',n:'Бейнелеу өнері',subj:'Шығармашылық',hol:'A',w:{A:3},klim:['Көркем']},
+  {code:'B031',n:'Сән, дизайн',subj:'Шығармашылық',hol:'A',w:{A:3},klim:['Көркем']},
+  {code:'B032',n:'Философия және этика',subj:'Дж. тарихы – География',hol:'IAS',w:{I:3,A:2,S:1},klim:['Таңба','Адам']},
+  {code:'B033',n:'Дінтану және теология',subj:'Шығармашылық',hol:'IAS',w:{I:3,A:2,S:1},klim:['Таңба','Адам']},
+  {code:'B034',n:'Тарих (Ғылыми тарих)',subj:'Дж. тарихы – География',hol:'ISA',w:{I:3,S:2,A:1},klim:['Таңба','Адам']},
+  {code:'B134',n:'Археология және этнология',subj:'Дж. тарихы – География',hol:'IRA',w:{I:3,R:2,A:1},klim:['Табиғат','Таңба']},
+  {code:'B035',n:'Түркітану',subj:'Шет тілі – Дж. тарихы',hol:'IAS',w:{I:3,A:2,S:1},klim:['Таңба','Адам']},
+  {code:'B036',n:'Аударма ісі (Шетел филологиясы)',subj:'Шет тілі – Дж. тарихы',hol:'ASC',w:{A:3,S:2,C:1},klim:['Таңба','Адам']},
+  {code:'B037',n:'Филология',subj:'Қаз. Тілі – Қаз. Әдебиеті / Орыс. Тілі – Орыс. Әдебиеті',hol:'AIS',w:{A:3,I:2,S:1},klim:['Таңба']},
+  {code:'B038',n:'Әлеуметтану',subj:'Математика – География',hol:'ISE',w:{I:3,S:2,E:1},klim:['Адам','Таңба']},
+  {code:'B039',n:'Мәдениеттану',subj:'Шет тілі – Дж. тарихы',hol:'ASI',w:{A:3,S:2,I:1},klim:['Көркем','Таңба']},
+  {code:'B040',n:'Саясаттану',subj:'Шет тілі – Дж. тарихы',hol:'ISE',w:{I:3,S:2,E:1},klim:['Адам','Таңба']},
+  {code:'B140',n:'Халықаралық қатынастар және дипломатия',subj:'Шет тілі – Дж. тарихы',hol:'IES',w:{I:3,E:2,S:1},klim:['Адам','Таңба']},
+  {code:'B041',n:'Психология',subj:'Биология – География',hol:'SIA',w:{S:3,I:2,A:1},klim:['Адам']},
+  {code:'B042',n:'Журналистика және репортер ісі',subj:'Шығармашылық',hol:'AES',w:{A:3,E:2,S:1},klim:['Таңба','Адам']},
+  {code:'B043',n:'Кітапхана ісі, ақпараттарды өңдеу және мұрағат ісі',subj:'Қаз. Тілі – Қаз. Әдебиеті / Орыс. Тілі – Орыс. Әдебиеті',hol:'CSA',w:{C:3,S:2,A:1},klim:['Таңба','Адам']},
+  {code:'B044',n:'Менеджмент және басқару',subj:'Математика – География',hol:'ECS',w:{E:3,C:2,S:1},klim:['Адам','Таңба']},
+  {code:'B045',n:'Аудит және салық салу',subj:'Математика – География',hol:'CEI',w:{C:3,E:2,I:1},klim:['Таңба']},
+  {code:'B046',n:'Қаржы, экономика, банк және сақтандыру ісі',subj:'Математика – География',hol:'CIE',w:{C:3,I:2,E:1},klim:['Таңба']},
+  {code:'B047',n:'Маркетинг және жарнама',subj:'Математика – География',hol:'EAC',w:{E:3,A:2,C:1},klim:['Адам','Көркем']},
+  {code:'B048',n:'Еңбек дағдылары (HR және бизнес жоспарлау)',subj:'Математика – География',hol:'SEC',w:{S:3,E:2,C:1},klim:['Адам','Таңба']},
+  {code:'B049',n:'Құқық',subj:'Дж. тарихы – Құқық негіздері',hol:'EIS',w:{E:3,I:2,S:1},klim:['Таңба','Адам']},
+  {code:'B050',n:'Биологиялық және сабақтас ғылымдар (Биотехнология, Генетика, Микробиология, Биомедицина, Биоинформатика)',subj:'Биология – Химия',hol:'IRC',w:{I:3,R:2,C:1},klim:['Табиғат','Таңба']},
+  {code:'B051',n:'Қоршаған орта (Экология)',subj:'Биология – География',hol:'IRS',w:{I:3,R:2,S:1},klim:['Табиғат']},
+  {code:'B052',n:'Жер туралы ғылым (География, Гидрология, Метеорология, Сейсмология)',subj:'Математика – География',hol:'IRC',w:{I:3,R:2,C:1},klim:['Табиғат','Таңба']},
+  {code:'B053',n:'Химия (Қолданбалы химия, Бейорганикалық химия, Химиялық инжиниринг)',subj:'Биология – Химия',hol:'IRC',w:{I:3,R:2,C:1},klim:['Табиғат','Таңба']},
+  {code:'B054',n:'Физика (Ядролық физика, Астрономия, Нанотехнология, Киберфизика, Техникалық физика)',subj:'Математика – Физика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба']},
+  {code:'B055',n:'Математика және статистика',subj:'Математика – Физика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба']},
+  {code:'B056',n:'Механика (Машина және робототехника механикасы)',subj:'Математика – Физика',hol:'IRC',w:{I:3,R:2,C:1},klim:['Техника','Таңба']},
+  {code:'B057',n:'Ақпараттық технологиялар (IT)',subj:'Математика – Информатика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба','Техника']},
+  {code:'B058',n:'Ақпараттық қауіпсіздік (Киберқауіпсіздік)',subj:'Математика – Информатика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба','Техника']},
+  {code:'B059',n:'Коммуникациялар және коммуникациялық технологиялар',subj:'Математика – Физика',hol:'IRC',w:{I:3,R:2,C:1},klim:['Техника','Таңба']},
+  {code:'B060',n:'Химиялық инженерия және процестер',subj:'Химия – Физика / Биология – Химия',hol:'IRC',w:{I:3,R:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B061',n:'Материалтану және технологиялар',subj:'Математика – Физика',hol:'IRC',w:{I:3,R:2,C:1},klim:['Техника']},
+  {code:'B062',n:'Электр техникасы және энергетика',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B063',n:'Электр техникасы және автоматтандыру',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B064',n:'Механика және металл өңдеу (Машина жасау, Механикалық инженерия, Робототехника)',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B065',n:'Автокөлік құралдары',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B165',n:'Магистральді желілер және инфрақұрылым',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B066',n:'Теңіз көлігі және технологиялары',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B166',n:'Көліктік имараттар',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Таңба']},
+  {code:'B067',n:'Әуе көлігі және технологиялары',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B167',n:'Ұшатын аппараттар мен қозғалтқыштарды ұшуда пайдалану',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B068',n:'Азық-түлік өнімдерінің өндірісі',subj:'Биология – Химия',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B069',n:'Материалдар өндірісі (шыны, қағаз, пластик, ағаш)',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B070',n:'Тоқыма: киім, аяқ киім және былғары бұйымдары',subj:'Математика – Физика',hol:'RCA',w:{R:3,C:2,A:1},klim:['Техника','Көркем']},
+  {code:'B071',n:'Тау-кен ісі және пайдалы қазбаларды өндіру (Геология, Мұнай-газ ісі)',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B072',n:'Фармацевтикалық өндіріс технологиясы',subj:'Биология – Химия',hol:'IRC',w:{I:3,R:2,C:1},klim:['Табиғат','Техника']},
+  {code:'B073',n:'Сәулет (Архитектура)',subj:'Шығармашылық',hol:'AIR',w:{A:3,I:2,R:1},klim:['Көркем','Таңба','Техника']},
+  {code:'B074',n:'Қала құрылысы, құрылыс жұмыстары және азаматтық құрылыс (Құрылыс, Геодезия және картография)',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Таңба']},
+  {code:'B075',n:'Кадастр және жерге орналастыру',subj:'Математика – География',hol:'CIR',w:{C:3,I:2,R:1},klim:['Таңба','Табиғат']},
+  {code:'B076',n:'Стандарттау, сертификаттау және метрология (сала бойынша)',subj:'Математика – Физика',hol:'CIR',w:{C:3,I:2,R:1},klim:['Таңба','Техника']},
+  {code:'B077',n:'Өсімдік шаруашылығы (Агрономия)',subj:'Биология – Химия',hol:'RIS',w:{R:3,I:2,S:1},klim:['Табиғат']},
+  {code:'B078',n:'Мал шаруашылығы',subj:'Биология – Химия',hol:'RIS',w:{R:3,I:2,S:1},klim:['Табиғат']},
+  {code:'B079',n:'Орман шаруашылығы',subj:'Биология – География',hol:'RIC',w:{R:3,I:2,C:1},klim:['Табиғат']},
+  {code:'B080',n:'Балық шаруашылығы',subj:'Биология – Химия',hol:'RIC',w:{R:3,I:2,C:1},klim:['Табиғат']},
+  {code:'B082',n:'Су ресурстары және суды пайдалану',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B083',n:'Ветеринария',subj:'Биология – Химия',hol:'IRS',w:{I:3,R:2,S:1},klim:['Табиғат','Адам']},
+  {code:'B183',n:'Агроинженерия',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B084',n:'Мейіргер ісі',subj:'Биология – Химия',hol:'SIR',w:{S:3,I:2,R:1},klim:['Адам','Табиғат']},
+  {code:'B085',n:'Фармация',subj:'Биология – Химия',hol:'ICS',w:{I:3,C:2,S:1},klim:['Табиғат','Таңба']},
+  {code:'BM086',n:'Медицина',subj:'Биология – Химия',hol:'ISR',w:{I:3,S:2,R:1},klim:['Адам','Табиғат']},
+  {code:'BM087',n:'Стоматология',subj:'Биология – Химия',hol:'IRS',w:{I:3,R:2,S:1},klim:['Адам','Табиғат','Техника']},
+  {code:'BM088',n:'Педиатрия',subj:'Биология – Химия',hol:'ISR',w:{I:3,S:2,R:1},klim:['Адам','Табиғат']},
+  {code:'B089',n:'Қоғамдық денсаулық сақтау (IT-медицина)',subj:'Биология – Химия',hol:'ISC',w:{I:3,S:2,C:1},klim:['Адам','Таңба']},
+  {code:'BM089',n:'Медициналық-профилактикалық іс',subj:'Биология – Химия',hol:'IRC',w:{I:3,R:2,C:1},klim:['Табиғат','Таңба']},
+  {code:'B090',n:'Әлеуметтік жұмыс',subj:'Биология – География',hol:'SEA',w:{S:3,E:2,A:1},klim:['Адам']},
+  {code:'B091',n:'Туризм',subj:'География – Шет тілі',hol:'ESA',w:{E:3,S:2,A:1},klim:['Адам']},
+  {code:'B092',n:'Тынығу',subj:'Шығармашылық',hol:'SEA',w:{S:3,E:2,A:1},klim:['Адам']},
+  {code:'B093',n:'Мейрамхана ісі және мейманхана бизнесі',subj:'География – Шет тілі',hol:'ESR',w:{E:3,S:2,R:1},klim:['Адам']},
+  {code:'B094',n:'Санитарлық-профилактикалық іс-шаралар',subj:'Математика – Физика',hol:'RCI',w:{R:3,C:2,I:1},klim:['Техника','Табиғат']},
+  {code:'B095',n:'Көлік қызметтері (Логистика)',subj:'Математика – География',hol:'CRE',w:{C:3,R:2,E:1},klim:['Таңба','Техника']},
+  {code:'B096',n:'Құқық қорғау қызметі',subj:'Дж. тарихы – Құқық негіздері',hol:'RSC',w:{R:3,S:2,C:1},klim:['Адам','Техника']},
+  {code:'B098',n:'Спорт (Киберспорт, Тренер, Инструктор)',subj:'Шығармашылық',hol:'SRE',w:{S:3,R:2,E:1},klim:['Адам']},
+  {code:'B135',n:'Шығыстану',subj:'Шет тілі – Дж. тарихы',hol:'IAS',w:{I:3,A:2,S:1},klim:['Таңба','Адам']},
+  {code:'B145',n:'Мемлекеттік аудит',subj:'Математика – География',hol:'CEI',w:{C:3,E:2,I:1},klim:['Таңба']},
+  {code:'B173',n:'Гидромелиорация',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника','Табиғат']},
+  {code:'B175',n:'Сумен қамтамасыз ету және суды бұру',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B176',n:'Гидротехникалық құрылыс және су ресурстарын басқару',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B158',n:'Криптология',subj:'Математика – Информатика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба']},
+  {code:'B120',n:'Кәсіптік оқыту педагогтарын даярлау',subj:'Математика – Физика',hol:'RSE',w:{R:3,S:2,E:1},klim:['Адам','Техника']},
+  {code:'B126',n:'Көлік құрылысы',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B157',n:'Математикалық және компьютерлік модельдеу',subj:'Математика – Информатика',hol:'ICR',w:{I:3,C:2,R:1},klim:['Таңба']},
+  {code:'B234',n:'Музей ісі және ескерткіштерді қорғау',subj:'Шет тілі – Дж. тарихы',hol:'CIA',w:{C:3,I:2,A:1},klim:['Таңба','Көркем']},
+  {code:'B171',n:'Металлургия',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B162',n:'Жылу энергетикасы',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B141',n:'Халықаралық экономикалық қатынастар',subj:'География – Шет тілі',hol:'EIC',w:{E:3,I:2,C:1},klim:['Таңба','Адам']},
+  {code:'B142',n:'Қоғаммен байланыс',subj:'Шығармашылық',hol:'EAS',w:{E:3,A:2,S:1},klim:['Адам','Көркем']},
+  {code:'B161',n:'Материалдық инженерия',subj:'Математика – Физика',hol:'IRC',w:{I:3,R:2,C:1},klim:['Техника']},
+  {code:'B172',n:'Материалды қысыммен өңдеу',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B265',n:'Темір жол көлігі және технология',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']},
+  {code:'B271',n:'Мұнай-газ ісі',subj:'Математика – Физика',hol:'RIC',w:{R:3,I:2,C:1},klim:['Техника']}
+];
+const UNIS=[
+  {code:'001',n:'Астана медицина университеті',city:'Астана қ.'},
+  {code:'002',n:'Seifullin University (С. Сейфуллин атындағы Қазақ агротехникалық зерттеу университеті)',city:'Астана қ.'},
+  {code:'003',n:'Yessenov University',city:'Маңғыстау обл.'},
+  {code:'004',n:'М. Оспанов атындағы Батыс Қазақстан медицина университеті',city:'БҚО'},
+  {code:'005',n:'Zhubanov University',city:'Ақтөбе обл.'},
+  {code:'006',n:'Құрманғазы атындағы Қазақ ұлттық консерваториясы',city:'Алматы қ.'},
+  {code:'007',n:'Abai University (Абай атындағы Қазақ Ұлттық Педагогикалық университеті)',city:'Алматы қ.'},
+  {code:'008',n:'Altynsarin University (Арқалық педагогикалық университеті)',city:'Қостанай обл.'},
+  {code:'009',n:'Сафи Өтебаев атындағы Атырау мұнай және газ университеті',city:'Атырау обл.'},
+  {code:'010',n:'Халел Досмұхамедов атындағы Атырау университеті',city:'Атырау обл.'},
+  {code:'011',n:'Amanzholov University',city:'ШҚО'},
+  {code:'012',n:'Д. Серікбаев атындағы Шығыс Қазақстан техникалық университеті',city:'ШҚО'},
+  {code:'013',n:'Л.Н. Гумилев атындағы Еуразия ұлттық университеті',city:'Астана қ.'},
+  {code:'014',n:'Ө.А. Байқоңыров атындағы Жезқазған университеті',city:'Ұлытау обл.'},
+  {code:'015',n:'Zhetysu University (Ілияс Жансүгіров атындағы Жетісу университеті)',city:'Жетісу обл.'},
+  {code:'016',n:'М. Өтемісов атындағы Батыс Қазақстан университеті (Makhambet University)',city:'БҚО'},
+  {code:'017',n:'Т.Қ.Жүргенов атындағы Қазақ ұлттық өнер академиясы',city:'Алматы қ.'},
+  {code:'018',n:'Қазақ ұлттық өнер университеті',city:'Астана қ.'},
+  {code:'019',n:'Мұхаметжан Тынышбаев атындағы ALT Университеті',city:'Алматы қ.'},
+  {code:'020',n:'Қазақ спорт және туризм академиясы',city:'Алматы қ.'},
+  {code:'021',n:'Narxoz University',city:'Алматы қ.'},
+  {code:'022',n:'КАУ+КазГАСА (Халықаралық білім беру корпорациясы)',city:'Алматы қ.'},
+  {code:'023',n:'Абылай хан атындағы Қазақ халықаралық қатынастар және әлем тілдері университеті',city:'Алматы қ.'},
+  {code:'024',n:'Қазақ ұлттық аграрлық зерттеу университеті',city:'Алматы қ.'},
+  {code:'025',n:'Қазақ ұлттық қыздар педагогикалық университеті',city:'Алматы қ.'},
+  {code:'026',n:'С.Ж. Асфендияров атындағы Қазақ ұлттық медицина университеті',city:'Алматы қ.'},
+  {code:'027',n:'Farabi University (Әл-Фараби атындағы Қазақ ұлттық университеті)',city:'Алматы қ.'},
+  {code:'029',n:'Satbayev University',city:'Алматы қ.'},
+  {code:'030',n:'Қарағанды медицина университеті',city:'Қарағанды обл.'},
+  {code:'031',n:'Karaganda Buketov University',city:'Қарағанды обл.'},
+  {code:'032',n:'Ә. Сағынов атындағы Қарағанды техникалық университеті',city:'Қарағанды обл.'},
+  {code:'033',n:'Қарағанды индустриялық университеті',city:'Қарағанды обл.'},
+  {code:'034',n:'Korkyt ata University',city:'Қызылорда обл.'},
+  {code:'035',n:'Ualikhanov University',city:'Ақмола обл.'},
+  {code:'036',n:'Baitursynov University',city:'Қостанай обл.'},
+  {code:'037',n:'Akhmet Yassawi University',city:'Түркістан обл.'},
+  {code:'038',n:'Toraighyrov University',city:'Павлодар обл.'},
+  {code:'039',n:'Рудный индустриалдық институты',city:'Қостанай обл.'},
+  {code:'040',n:'Kozybayev University',city:'СҚО'},
+  {code:'041',n:'Семей медицина университеті',city:'Абай обл.'},
+  {code:'042',n:'Shakarim University',city:'Абай обл.'},
+  {code:'043',n:'Dulaty University',city:'Жамбыл обл.'},
+  {code:'044',n:'Оңтүстік Қазақстан медицина академиясы',city:'Шымкент қ.'},
+  {code:'045',n:'Auezov University',city:'Шымкент қ.'},
+  {code:'047',n:'А.Қ. Құсайынов атындағы Еуразия гуманитарлық институты',city:'Астана қ.'},
+  {code:'049',n:'Халықаралық инженерлік-технологиялық университеті',city:'Алматы қ.'},
+  {code:'053',n:'Алматы технологиялық университеті',city:'Алматы қ.'},
+  {code:'057',n:'Ғ. Дәукеев атындағы Алматы энергетика және байланыс университеті',city:'Алматы қ.'},
+  {code:'069',n:'Халықаралық Бизнес Университеті',city:'Алматы қ.'},
+  {code:'078',n:'Лев Борисович Гончаров атындағы Қазақ автомобиль-жол институты',city:'Алматы қ.'},
+  {code:'079',n:'Caspian University',city:'Алматы қ.'},
+  {code:'080',n:'Қазақстан-Ресей медицина университеті',city:'Алматы қ.'},
+  {code:'082',n:'Қазақстан-Неміс университеті',city:'Алматы қ.'},
+  {code:'083',n:'Алматы менеджмент университеті',city:'Алматы қ.'},
+  {code:'089',n:'"Q" University',city:'Алматы қ.'},
+  {code:'093',n:'Turan University',city:'Алматы қ.'},
+  {code:'111',n:'Qazaq AI Research University',city:'Астана қ.'},
+  {code:'116',n:'Академия «Bolashaq»',city:'Қарағанды обл.'},
+  {code:'122',n:'Қазтұтынуодағы Қарағанды университеті',city:'Қарағанды обл.'},
+  {code:'140',n:'М. Дулатов атындағы Қостанай инженерлік-экономикалық университеті',city:'Қостанай обл.'},
+  {code:'141',n:'Alikhan Bokeikhan University',city:'Абай обл.'},
+  {code:'143',n:'Tashenev University',city:'Шымкент қ.'},
+  {code:'145',n:'Академик Зұлқарнай Алдамжар атындағы Қостанай әлеуметтік-техникалық университеті',city:'Қостанай обл.'},
+  {code:'146',n:'Инновациялық Еуразия университеті',city:'Павлодар обл.'},
+  {code:'147',n:'Академик Қ. Сәтбаев атындағы Екібастұз инженерлік-техникалық институты',city:'Павлодар обл.'},
+  {code:'151',n:'Гуманитарлы-техникалық академия',city:'Ақмола обл.'},
+  {code:'153',n:'Қазақстан-Американдық еркін университеті',city:'ШҚО'},
+  {code:'154',n:'Алматы гуманитарлық-экономикалық университеті',city:'Алматы қ.'},
+  {code:'157',n:'Азаматтық авиация академиясы',city:'Алматы қ.'},
+  {code:'158',n:'А. Мырзахметов атындағы Көкшетау университеті',city:'Ақмола обл.'},
+  {code:'160',n:'Management, Engineering, Technology and Analytics University',city:'Алматы қ.'},
+  {code:'162',n:'Халықаралық көліктік-гуманитарлық университеті',city:'Алматы қ.'},
+  {code:'173',n:'Esil University',city:'Астана қ.'},
+  {code:'174',n:'Maqsut Narikbayev University',city:'Астана қ.'},
+  {code:'182',n:'Қазақ технология және бизнес университеті',city:'Астана қ.'},
+  {code:'184',n:'«Тұран-Астана» университеті',city:'Астана қ.'},
+  {code:'185',n:'Астана халықаралық университеті (AIU)',city:'Астана қ.'},
+  {code:'190',n:'Халықаралық ақпараттық технологиялар университеті',city:'Алматы қ.'},
+  {code:'196',n:'Ө.Жәнібеков атындағы Оңтүстік Қазақстан педагогикалық университеті',city:'Шымкент қ.'},
+  {code:'198',n:'Батыс Қазақстан инновациялық-технологиялық университеті',city:'БҚО'},
+  {code:'199',n:'Қазақстан инновациялық және телекоммуникациялық жүйелер университеті',city:'БҚО'},
+  {code:'200',n:'Kunaev University',city:'Алматы қ.'},
+  {code:'202',n:'Академик Ә.Қуатбеков атындағы Халықтар достығы университеті',city:'Шымкент қ.'},
+  {code:'203',n:'Аймақтық Инновациялық университеті',city:'Шымкент қ.'},
+  {code:'205',n:'Қазақ ұлттық хореография академиясы',city:'Астана қ.'},
+  {code:'223',n:'Шерхан Мұртаза атындағы Халықаралық Тараз инновациялық институты',city:'Жамбыл обл.'},
+  {code:'302',n:'SDU University',city:'Алматы обл.'},
+  {code:'305',n:'Bolashak University',city:'Қызылорда обл.'},
+  {code:'416',n:'Baishev University',city:'Ақтөбе обл.'},
+  {code:'421',n:'Қазақстан-Британ техникалық университеті',city:'Алматы қ.'},
+  {code:'501',n:'Жәңгір хан атындағы Батыс Қазақстан аграрлық-техникалық университеті',city:'БҚО'},
+  {code:'503',n:'Nur-Mubarak University',city:'Алматы қ.'},
+  {code:'517',n:'Margulan University (Павлодар педагогикалық университеті)',city:'Павлодар обл.'},
+  {code:'522',n:'Astana IT University',city:'Астана қ.'},
+  {code:'523',n:'Халықаралық туризм және меймандостық университеті',city:'Түркістан обл.'},
+  {code:'527',n:'Kazakh National University of Sports (Қазақ ұлттық спорт университеті)',city:'Астана қ.'},
+  {code:'528',n:'Kyzylorda Open University',city:'Қызылорда обл.'},
+  {code:'529',n:'Қазақ ұлттық су шаруашылығы және ирригация университеті',city:'Жамбыл обл.'},
+  {code:'533',n:'Филиал Российского химико-технологического университета имени Д.И. Менделеева в городе Тараз',city:'Жамбыл обл.'},
+  {code:'543',n:'Ulytau University',city:'Ұлытау обл.'}
+];
+
+// alias for the matching engine; derive ordered codes for chips/filters
+const JOBS = SPECIALTIES;
+JOBS.forEach(j=>{ j.c = Object.keys(j.w).sort((a,b)=>j.w[b]-j.w[a]); });
+
+/* ---------- TEST STATE ---------- */
+let answers = [];
+let cur = 0;
+let runFlow = FLOW.slice();
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function startTest(){
+  // shuffle Holland items within their block; keep Klimov & MBTI order
+  const holl = shuffle(FLOW.filter(f=>f.sec===0).slice());
+  const rest = FLOW.filter(f=>f.sec!==0);
+  runFlow = holl.concat(rest);
+  answers = new Array(runFlow.length).fill(null);
+  cur = 0;
+  go('test');
+  renderQ();
+}
+
+function renderQ(){
+  const item = runFlow[cur];
+  const sec = SECTIONS[item.sec];
+  const secItems = runFlow.filter(f=>f.sec===item.sec);
+  const secStart = runFlow.findIndex(f=>f.sec===item.sec);
+  const posInSec = cur - secStart + 1;
+
+  document.getElementById('secLabel').textContent = 'Бөлім '+(item.sec+1)+'/3 · '+sec.title;
+  document.getElementById('secPrompt').textContent = sec.prompt;
+  document.getElementById('pcount').textContent =
+    posInSec+' / '+secItems.length+'  ·  барлығы '+(cur+1)+'/'+runFlow.length;
+  document.getElementById('pbar').style.width = (cur/runFlow.length*100)+'%';
+  document.getElementById('backBtn').style.visibility = cur===0 ? 'hidden':'visible';
+
+  const box = document.getElementById('likert');
+  box.innerHTML = '';
+  const qEl = document.getElementById('qtext');
+
+  if(item.format==='pick'){
+    // forced-choice: two option buttons, no separate question text
+    qEl.textContent = '';
+    box.className = 'pickbox';
+    item.pair.forEach((opt,idx)=>{
+      const b=document.createElement('button');
+      b.className='pickopt';
+      b.innerHTML='<span class="pk-let">'+(idx===0?'А':'Ә')+'</span>'+opt.q;
+      b.onclick=()=>pickAnswer(opt.t);
+      box.appendChild(b);
+    });
+  } else {
+    qEl.textContent = item.q;
+    box.className = (item.axis==='mbti') ? 'likert seven' : 'likert';
+    sec.scale.forEach(opt=>{
+      const b=document.createElement('button');
+      b.innerHTML = (item.axis==='mbti') ? '<span class="dot"></span>'+opt.label
+                                         : '<span class="dot"></span>'+opt.label;
+      b.onclick=()=>answer(opt.v);
+      box.appendChild(b);
+    });
+  }
+}
+function answer(v){
+  const item = runFlow[cur];
+  if(item.axis==='holland') answers[cur]={axis:'holland', k:item.k, v};
+  else answers[cur]={axis:'mbti', dim:item.dim, pole:item.pole, v};
+  next();
+}
+function pickAnswer(t){ answers[cur]={axis:'klimov', t}; next(); }
+function next(){ if(cur<runFlow.length-1){ cur++; renderQ(); } else showResults(); }
+function prevQ(){ if(cur>0){cur--; renderQ();} }
+
+/* ---------- SCORING ---------- */
+const RKEYS=['R','I','A','S','E','C'];
+const KKEYS=['Табиғат','Техника','Адам','Таңба','Көркем'];
+const KCODE={'T':'Табиғат','X':'Техника','H':'Адам','Z':'Таңба','K':'Көркем'};
+
+function computeAll(){
+  // Holland: 6 items/type, v in -2..2  → 0..100
+  const hS={R:0,I:0,A:0,S:0,E:0,C:0};
+  // Klimov: count picks per type (each type appears 8x)
+  const kS={'Табиғат':0,'Техника':0,'Адам':0,'Таңба':0,'Көркем':0};
+  // MBTI: signed sums per dimension (positive letter: E,S,T,J)
+  const POS={EI:'E',SN:'S',TF:'T',JP:'J'};
+  const mS={EI:0,SN:0,TF:0,JP:0};
+
+  answers.forEach(a=>{ if(!a) return;
+    if(a.axis==='holland') hS[a.k]+=a.v;
+    else if(a.axis==='klimov') kS[KCODE[a.t]]++;
+    else if(a.axis==='mbti'){ mS[a.dim] += (a.pole===POS[a.dim] ? a.v : -a.v); }
+  });
+
+  const holland={}; RKEYS.forEach(k=>{ holland[k]=Math.round(((hS[k]+12)/24)*100); });
+  const klimov={}; KKEYS.forEach(k=>{ klimov[k]=Math.round((kS[k]/8)*100); });
+  const mbti={dims:{}, type:''};
+  Object.keys(POS).forEach(d=>{
+    const pos=POS[d], neg={EI:'I',SN:'N',TF:'F',JP:'P'}[d];
+    const letter = mS[d]>=0 ? pos : neg;
+    const strength = Math.min(100, Math.round(Math.abs(mS[d])/12*100)); // max |sum| = 4*3
+    mbti.dims[d]={letter, strength};
+    mbti.type += letter;
+  });
+  return {holland, klimov, mbti};
+}
+
+/* ---------- MATCHING ENGINE (Holland cosine + Klimov second opinion) ---------- */
+function cosine(vecA, vecB){
+  let dot=0,mA=0,mB=0;
+  RKEYS.forEach(k=>{ const a=vecA[k]||0, b=vecB[k]||0; dot+=a*b; mA+=a*a; mB+=b*b; });
+  return (mA&&mB)? dot/(Math.sqrt(mA)*Math.sqrt(mB)) : 0;
+}
+function matchJobs(relHolland, klimTop){
+  // klimTop = person's top Klimov types (array, strongest first)
+  const top2 = klimTop.slice(0,2), top3 = klimTop.slice(0,3);
+  return JOBS.map(j=>{
+    const cos = cosine(relHolland, j.w);        // -1..1
+    let iComp = (cos+1)/2;                       // 0..1
+    // Klimov second opinion: reinforce or dampen
+    const hit2 = j.klim.filter(t=>top2.includes(t)).length;
+    const hit3 = j.klim.filter(t=>top3.includes(t)).length;
+    let adj = 0;
+    if(hit2>0) adj += Math.min(0.15, hit2*0.08);
+    else if(hit3===0) adj -= 0.05;               // job's field far from person's inclination
+    const final = Math.max(0, Math.min(1, iComp+adj));
+    return {...j, cos, final, pct:Math.round(40+final*58)};
+  }).sort((a,b)=>b.final-a.final);
+}
+
+
+/* ---------- KLIMOV + MBTI descriptor data ---------- */
+const KLIMOV_DESC = {
+  'Табиғат':{ic:'🌱', d:'тірі табиғатпен: өсімдік, жануар, организм'},
+  'Техника':{ic:'⚙️', d:'техникамен: машина, механизм, материал'},
+  'Адам':   {ic:'🤝', d:'адамдармен: оқыту, көмек, қарым-қатынас'},
+  'Таңба':  {ic:'🔢', d:'таңбалық жүйемен: сан, мәтін, код, дерек'},
+  'Көркем': {ic:'🎨', d:'көркем бейнемен: өнер, дизайн, шығармашылық'}
+};
+const MBTI_DIM = {
+  EI:{name:'Энергия', E:{t:'Экстраверсия', d:'адамдармен, топта, сыртқы белсенділікте қуат аласың'}, I:{t:'Интроверсия', d:'жеке ойлауда, тыныш ортада қуат жинайсың'}},
+  SN:{name:'Ақпарат', S:{t:'Сезіну', d:'нақты фактілер мен практикаға сүйенесің'}, N:{t:'Интуиция', d:'идеялар мен мүмкіндіктерге бейімсің'}},
+  TF:{name:'Шешім', T:{t:'Ойлау', d:'логика мен фактіні басшылыққа аласың'}, F:{t:'Сезім', d:'адамдар мен құндылықты ескересің'}},
+  JP:{name:'Стиль', J:{t:'Жоспарлы', d:'реттілік пен алдын ала жоспарды ұнатасың'}, P:{t:'Икемді', d:'еркіндік пен өзгеріске ашықсың'}}
+};
+const MBTI_ROLE = {E:'көшбасшылық не командалық', I:'жеке не сарапшылық', T:'талдау не жүйе', F:'адаммен жұмыс не қолдау', J:'ұйымдастыру не жоспарлау', P:'шығармашылық не икемді'};
+
+function showResults(){
+  const all = computeAll();
+  const H = all.holland, K = all.klimov, M = all.mbti;
+
+  /* ----- Holland: normative correction ----- */
+  const rel={}; RKEYS.forEach(k=>{ rel[k]=H[k]-NORM_BASE[k]; });
+  const disp={}; RKEYS.forEach(k=>{ disp[k]=Math.max(4,Math.min(99,Math.round(50+rel[k]))); });
+  const ranked=RKEYS.slice().sort((a,b)=>rel[b]-rel[a]);
+  const top=ranked.slice(0,3), bottom=ranked[ranked.length-1], code=top.join('');
+
+  /* ----- Klimov ranking ----- */
+  const kRanked=KKEYS.slice().sort((a,b)=>K[b]-K[a]);
+  const kTop=kRanked[0], kTop2=kRanked[1];
+
+  /* ----- Convergence (Holland ↔ Klimov) ----- */
+  const bridge = KLIMOV_TYPES[kTop].bridge;            // Holland letters implied by Klimov top
+  const converge = bridge.some(l=>top.includes(l));
+  const strongConverge = bridge.some(l=>top.slice(0,2).includes(l));
+  const diff = rel[top[0]] - rel[top[2]];              // differentiation of profile
+  let confidence, confNote;
+  if(strongConverge && diff>=6){ confidence='Жоғары';
+    confNote='Екі тест те бір бағытты нық көрсетіп тұр — нәтижеге сенім жоғары. Ұсынылған мамандықтарды батыл қарастыр.'; }
+  else if(converge){ confidence='Орташа';
+    confNote='Тесттер жалпы үйлеседі, бірақ профиль әлі толық айқын емес. Бірнеше бағытты қатар зертте.'; }
+  else { confidence='Ізденіс керек';
+    confNote='Қызығушылығың мен бейімділігің әзір әртүрлі бағытты көрсетіп тұр — бұл қалыпты жайт. Тізімді кеңірек қарап, тәжірибе жина, 2–3 айдан соң қайта өт.'; }
+
+  /* ===== HEADER + Holland profile ===== */
+  const nm=(document.getElementById('stuName')&&document.getElementById('stuName').value||'').trim();
+  document.getElementById('rhName').textContent = nm ? nm+', мынау сенің профилің' : 'Сенің профилің';
+  document.getElementById('rcode').textContent = code;
+  document.getElementById('rname').textContent = top.map(k=>TYPES[k].kk).join(' · ');
+  document.getElementById('rdesc').textContent =
+    'Holland тесті бойынша басым бағыттарың осы үшеуі. Төменде әр тестің нәтижесі мен олардың бір-бірімен үйлесімін көресің.';
+  const bars=document.getElementById('rbars');
+  bars.innerHTML = ranked.map(k=>
+    '<div class="bar-row"><span>'+TYPES[k].kk+'</span>'+
+    '<div class="bar-track"><div class="bar-fill" style="width:0"></div></div>'+
+    '<span class="bar-val">'+disp[k]+'</span></div>').join('');
+  setTimeout(()=>bars.querySelectorAll('.bar-fill').forEach((f,i)=>f.style.width=disp[ranked[i]]+'%'),60);
+
+  /* ===== 01 strengths ===== */
+  document.getElementById('rstrongDetail').innerHTML = top.map((k,i)=>
+    '<div class="strength-block"><div class="sb-head"><span class="sb-rank">'+(i+1)+'</span>'+
+    '<h3>'+TYPES[k].kk+' — '+TYPES[k].name+'</h3></div>'+
+    '<p class="sb-desc">'+TYPES[k].desc+'</p>'+
+    '<ul class="sb-list">'+TYPES[k].strong.map(s=>'<li>'+s+'</li>').join('')+'</ul>'+
+    '<div class="sb-ex">📌 '+TYPES[k].ex+'</div></div>').join('');
+
+  /* ===== 02 combo ===== */
+  const comboKey=top.slice(0,2).sort().join('');
+  const combo=COMBOS[comboKey]||{t:TYPES[top[0]].kk+' + '+TYPES[top[1]].kk, d:'Осы екі бағыт қатар жүрсе, екеуін ұштастыратын салаларды іздеу тиімді.'};
+  document.getElementById('rcombo').innerHTML='<h3>'+combo.t+'</h3><p>'+combo.d+'</p>';
+
+  /* ===== 03 narrative ===== */
+  const narr=[
+    {i:'📖', t:'Оқуда', x:TYPES[top[0]].learn},
+    {i:'🤝', t:'Адамдармен', x:TYPES[top[0]].people},
+    {i:'💡', t:'Идеялармен', x:TYPES[top[1]].ideas},
+    {i:'🧭', t:'Болашақта', x:TYPES[top[0]].future}
+  ];
+  document.getElementById('rnarr').innerHTML=narr.map(n=>
+    '<div class="nc"><h3>'+n.i+' '+n.t+'</h3><p>'+n.x+'</p></div>').join('');
+
+  /* ===== 04 Klimov ===== */
+  document.getElementById('rcompare').innerHTML = kRanked.map(t=>
+    '<div class="cmp-bar"><span style="min-width:80px">'+KLIMOV_DESC[t].ic+' '+t+'</span>'+
+    '<div class="cmp-track"><div class="cmp-fill int" style="width:'+K[t]+'%"></div></div>'+
+    '<span class="cmp-val">'+K[t]+'%</span></div>').join('');
+  document.getElementById('rcompareNote').innerHTML =
+    'Сен көбіне <b>'+KLIMOV_DESC[kTop].d+'</b> жұмыс істеуге бейімсің'+
+    (K[kTop2]>=60?', оған қоса <b>'+KLIMOV_DESC[kTop2].d.split(':')[0]+'</b> бағыты да жақын':'')+'.';
+
+  /* ===== 05 Convergence / confidence ===== */
+  document.getElementById('rvalues').innerHTML =
+    '<div class="conv-row"><div class="conv-side"><span class="conv-lbl">Holland</span><b>'+top.map(k=>TYPES[k].kk).slice(0,2).join(', ')+'</b></div>'+
+    '<div class="conv-link '+(converge?'ok':'no')+'">'+(converge?'⇄ үйлеседі':'⇄ әзір қайшы')+'</div>'+
+    '<div class="conv-side"><span class="conv-lbl">Климов</span><b>'+kTop+(K[kTop2]>=60?', '+kTop2:'')+'</b></div></div>'+
+    '<div class="conf-badge conf-'+(confidence==='Жоғары'?'hi':confidence==='Орташа'?'mid':'lo')+'">Сенім деңгейі: '+confidence+'</div>';
+  document.getElementById('rvaluesNote').innerHTML = confNote;
+
+  /* ===== 06 MBTI ===== */
+  document.getElementById('rwatch').innerHTML =
+    '<li style="list-style:none;margin-bottom:12px"><b style="font-size:24px;font-weight:900;font-family:\'Golos Text\'">'+M.type+'</b></li>'+
+    Object.keys(M.dims).map(d=>{ const L=M.dims[d].letter; const info=MBTI_DIM[d][L];
+      return '<li><b>'+MBTI_DIM[d].name+': '+info.t+' ('+L+')</b> — '+info.d+'</li>'; }).join('');
+  const roleBits=[M.dims.EI.letter,M.dims.TF.letter,M.dims.JP.letter].map(l=>MBTI_ROLE[l]);
+  document.getElementById('renv').innerHTML =
+    '<div class="et">Таңдаған бағытыңның ішіндегі рөл</div><p>Мінезіңе қарай саған <b>'+roleBits[0]+
+    '</b> рөл, <b>'+roleBits[1]+'</b> және <b>'+roleBits[2]+'</b> сипаттағы жұмыс жақынырақ. '+
+    'Мысалы, бір саланы таңдасаң да, дәл осы стиль сені сол саланың қай қырына бейімдейтінін көрсетеді.</p>';
+
+  /* ===== 07 matched specialties ===== */
+  const allScored = matchJobs(rel, kRanked);
+  const scored = allScored.slice(0,8);
+  document.getElementById('rjobs').innerHTML = scored.map((j,idx)=>{
+    const prim=Object.keys(j.w).filter(k=>j.w[k]>=2).map(k=>TYPES[k].kk).slice(0,2).join(' + ');
+    const kmatch=j.klim.filter(t=>kRanked.slice(0,2).includes(t)).length ? ' · Климов бойынша да сай' : '';
+    return '<div class="rank-row"><div class="rk">'+(idx+1)+'</div>'+
+      '<div class="rinfo"><h3>'+j.n+'</h3>'+
+      '<div class="rinfo-sub"><span class="sp-tag">'+j.code+'</span> · ҰБТ: '+j.subj+' · '+prim+' бағыты'+kmatch+'</div></div>'+
+      '<div class="rk-pct">'+j.pct+'%<small>сәйкес</small></div></div>';
+  }).join('');
+
+  /* ===== 08 least suitable ===== */
+  document.getElementById('rleast').innerHTML = allScored.slice(-4).reverse().map(j=>
+    '<div class="rank-row"><div class="rk">·</div>'+
+    '<div class="rinfo"><h3>'+j.n+'</h3><div class="rinfo-sub"><span class="sp-tag">'+j.code+'</span> · ҰБТ: '+j.subj+'</div></div>'+
+    '<div class="rk-pct">'+j.pct+'%<small>сәйкес</small></div></div>').join('');
+
+  /* ===== 09 subjects + plan ===== */
+  const subjMap={};
+  scored.slice(0,6).forEach(j=>j.subj.split(/[–\-\/]/).map(x=>x.trim()).filter(Boolean).forEach(s=>{ subjMap[s]=(subjMap[s]||0)+1; }));
+  const subjSorted=Object.keys(subjMap).sort((a,b)=>subjMap[b]-subjMap[a]).slice(0,5);
+  document.getElementById('rsubj').innerHTML = subjSorted.map(s=>
+    '<div class="subj-item"><b>'+s+'</b><span>'+subjMap[s]+' мамандықта</span></div>').join('');
+  document.getElementById('rsteps').innerHTML=[
+    TYPES[top[0]].grow,
+    'Осы пәндерге күш сал: '+subjSorted.slice(0,3).join(', ')+'.',
+    (confidence==='Жоғары'
+      ? 'Сенім деңгейің жоғары — тізімдегі бір мамандық иесімен сөйлес не тәжірибеден өт.'
+      : 'Профилің әлі айқындалып келеді — 2–3 бағытты қатар зертте, асықпа.'),
+    '2–3 айдан кейін тестті қайта өтіп, өзгерісті байқа.'
+  ].map(s=>'<li>'+s+'</li>').join('');
+  document.getElementById('rdev').innerHTML=
+    '<h4>🎯 Осы аптада</h4><ul><li>'+TYPES[top[0]].apply+'</li>'+
+    '<li>«'+scored[0].n+'» мамандығы туралы 2 дереккөз тап.</li></ul>'+
+    '<h4>🌱 Ұзақ мерзімге</h4><ul><li>'+TYPES[top[1]].grow+'</li>'+
+    '<li>Профиліңе сай үйірме, олимпиада не жобаға қатыс.</li></ul>';
+
+  /* ===== 10 reflection + closing ===== */
+  document.getElementById('rquest').innerHTML=[
+    'Тізімдегі қай мамандық жүрегіңе жақын, неге?',
+    'Holland пен Климов бір бағытты көрсетті ме, әлде әртүрлі ме? Неге деп ойлайсың?',
+    'Қай пәнге күш салсам, сол жолға жақындаймын?',
+    MBTI_DIM.EI[M.dims.EI.letter].t+' мінезім таңдаған салама қалай әсер етеді?',
+    'Ата-анам күткен мамандық менің табиғатыма сай ма?'
+  ].map(q=>'<li>'+q+'</li>').join('');
+  document.getElementById('rclose').textContent =
+    'Holland сені '+top.map(k=>TYPES[k].kk).join(', ')+' деп, Климов «'+kTop+'» бағытымен, MBTI '+M.type+
+    ' мінезімен сипаттайды. '+(confidence==='Жоғары'
+      ? 'Үш тест те үйлесіп тұр — бұл сенімді бастау.'
+      : 'Тесттер әлі толық үйлеспеді — бұл да маңызды ақпарат: асықпай ізден.')+
+    ' Есеп — үкім емес, өз жолыңды таңдауға көмекші құрал.';
+
+  /* ===== AI кеңесші профилі ===== */
+  aiProfile = {
+    hollandCode: code,
+    hollandNames: top.map(k=>TYPES[k].kk).join(', '),
+    klimovTop: kRanked.slice(0,2),
+    mbtiType: M.type,
+    topSpecialties: scored.slice(0,5).map(j=>j.code),
+    confidence: confidence
+  };
+  aiMessages = []; // жаңа нәтиже — жаңа әңгіме
+  document.getElementById('aiBody').innerHTML = '';
+  document.getElementById('aiFab').classList.remove('hidden-fab');
+
+  /* ===== Google Sheets-ке жіберілетін дерек ===== */
+  resultPayload = {
+    hollandCode: code,
+    hollandScores: disp,
+    klimovTop: kRanked.slice(0,2),
+    mbtiType: M.type,
+    confidence: confidence,
+    matchedSpecialties: scored.slice(0,5).map(j=>({code:j.code, n:j.n, pct:j.pct})),
+  };
+  savedThisSession = false;
+  document.getElementById('saveStatus').textContent = '';
+  document.getElementById('stuName').value = gateProfile ? gateProfile.studentName : '';
+  setName();
+
+  go('results');
+  submitToSheet();
+}
+
+function setName(){
+  const v=(document.getElementById('stuName').value||'').trim();
+  document.getElementById('rhName').textContent = v ? v+' · есеп' : '';
+}
+function jobCard(j, pct, why){
+  const el = document.createElement('div');
+  el.className='job';
+  const chips = j.c.map(c=>'<span class="chip">'+TYPES[c].kk+'</span>').join('')+
+    '<span class="chip dm">'+j.code+'</span>';
+  el.innerHTML =
+    (pct?'<span class="match">✦ '+pct+'% сәйкес</span>':'')+
+    '<h3>'+j.n+'</h3>'+
+    (why?'<div class="why">'+why+'</div>':'')+
+    '<div class="chips">'+chips+'</div>'+
+    '<p style="margin-top:12px;font-size:13px">ҰБТ таңдау пәні: <b>'+j.subj+'</b></p>';
+  return el;
+}
+
+/* ---------- CATALOG ---------- */
+let activeFilter='all';
+function renderFilters(){
+  const box = document.getElementById('filters');
+  const opts = [['all','Барлығы'], ...Object.keys(TYPES).map(k=>[k,TYPES[k].kk])];
+  box.innerHTML='';
+  opts.forEach(([k,label])=>{
+    const b=document.createElement('button');
+    b.textContent=label;
+    b.className = k===activeFilter?'on':'';
+    b.onclick=()=>{activeFilter=k; renderCatalog(); renderFilters();};
+    box.appendChild(b);
+  });
+}
+function renderCatalog(){
+  const box=document.getElementById('cjobs');
+  const q=(document.getElementById('catSearch').value||'').trim().toLowerCase();
+  let list = activeFilter==='all'?JOBS:JOBS.filter(j=>j.c.includes(activeFilter));
+  if(q) list=list.filter(j=>j.n.toLowerCase().includes(q)||j.code.toLowerCase().includes(q)||j.subj.toLowerCase().includes(q));
+  document.getElementById('catCount').textContent = list.length+' мамандық';
+  box.innerHTML='';
+  list.forEach(j=>box.appendChild(jobCard(j,0)));
+}
+
+/* ---------- UNIVERSITIES ---------- */
+function renderUnis(){
+  const box=document.getElementById('uniList');
+  const q=(document.getElementById('uniSearch').value||'').trim().toLowerCase();
+  let list=UNIS;
+  if(q) list=UNIS.filter(u=>u.n.toLowerCase().includes(q)||u.city.toLowerCase().includes(q));
+  document.getElementById('uniCount').textContent=list.length+' университет';
+  box.innerHTML='';
+  list.forEach(u=>{
+    const el=document.createElement('div');
+    el.className='uni-card';
+    el.innerHTML='<div class="uni-code">'+u.code+'</div><div><h3>'+u.n+'</h3><span class="uni-city">📍 '+u.city+'</span></div>';
+    box.appendChild(el);
+  });
+}
+
+/* ---------- TEACHER DEMO ---------- */
+const CLASS=[
+  ['Аружан С.','Көмекші · Аналитик','Психолог','done'],
+  ['Дамир Қ.','Практик · Ұйымдастырушы','IT-инженер','done'],
+  ['Ерасыл М.','Көшбасшы · Ұйымдастырушы','Кәсіпкер','done'],
+  ['Аяулым Т.','Креатор · Аналитик','Дизайнер','done'],
+  ['Нұрислам Б.','Аналитик · Практик','Ғалым-зерттеуші','done'],
+  ['Мадина Ж.','Көмекші · Креатор','Мұғалім','need'],
+  ['Санжар О.','Практик · Аналитик','Инженер','done'],
+  ['Аружан Д.','Аналитик · Көмекші','Дәрігер','need']
+];
+function renderTeacher(){
+  const tb=document.getElementById('teacherRows');
+  tb.innerHTML='';
+  CLASS.forEach(r=>{
+    const tr=document.createElement('tr');
+    const status = r[3]==='need'
+      ? '<span class="pill" style="background:rgba(233,168,58,.16);color:var(--gold-deep)">Кеңес қажет</span>'
+      : '<span class="pill" style="background:rgba(62,156,107,.13);color:var(--ok)">Аяқтады</span>';
+    tr.innerHTML='<td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+status+'</td>';
+    tb.appendChild(tr);
+  });
+}
+
+/* ---------- INIT ---------- */
+renderFilters(); renderCatalog(); renderUnis(); renderTeacher();
+go('home');
+</script>
+</body>
+</html>
