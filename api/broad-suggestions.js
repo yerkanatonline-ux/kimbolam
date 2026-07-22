@@ -3,10 +3,10 @@
 // бойынша AI-дің пікірі. Бұл ЕСЕПТЕЛГЕН нәтиже ЕМЕС (әдіснама шегі: есептеу/сәйкестендіру
 // логикасына AI араласпайды) — тек қосымша идея. Google Sheets/Gemini орнына келді.
 //
-// Провайдер-агностик (plan-eng-review D1): әдепкі — Anthropic (бүкіл backend сонда,
-// қосымша кілт керек емес). AI_PROVIDER=openai қойылса ғана OpenAI-ге ауысады
-// (OPENAI_API_KEY керек). Кодты өзгертпей env арқылы ауыстырылады.
+// Провайдер-агностик: провайдер таңдау lib/ai.js-те (OPENAI_API_KEY болса — OpenAI,
+// әйтпесе Anthropic; AI_PROVIDER арқылы мәжбүрлеуге болады). Кодты өзгертпей env арқылы ауысады.
 const { applyCors, handlePreflight, rateLimit, tooManyRequests } = require('../lib/http');
+const { callAI } = require('../lib/ai');
 
 const KLIMOV_DESC = {
   'Табиғат': 'тірі табиғатпен (өсімдік, жануар)',
@@ -43,50 +43,6 @@ function parseList(text) {
     .map(x => ({ n: String(x.n), why: String(x.why || '') }));
 }
 
-async function callAnthropic(prompt) {
-  const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': process.env.ANTHROPIC_API_KEY,
-      'anthropic-version': '2023-06-01',
-    },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-6',
-      max_tokens: 700,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!apiRes.ok) {
-    const t = await apiRes.text();
-    throw new Error(`Anthropic ${apiRes.status}: ${t}`);
-  }
-  const data = await apiRes.json();
-  const block = (data.content || []).find(b => b.type === 'text');
-  return block ? block.text : '';
-}
-
-async function callOpenAI(prompt) {
-  const apiRes = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      max_tokens: 700,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  });
-  if (!apiRes.ok) {
-    const t = await apiRes.text();
-    throw new Error(`OpenAI ${apiRes.status}: ${t}`);
-  }
-  const data = await apiRes.json();
-  return data.choices && data.choices[0] ? data.choices[0].message.content : '';
-}
-
 module.exports = async function handler(req, res) {
   applyCors(req, res);
   if (handlePreflight(req, res)) return;
@@ -102,11 +58,10 @@ module.exports = async function handler(req, res) {
     }
 
     const prompt = buildPrompt({ hollandCode, klimovTop, mbtiType });
-    const provider = process.env.AI_PROVIDER === 'openai' ? 'openai' : 'anthropic';
 
     let raw;
     try {
-      raw = provider === 'openai' ? await callOpenAI(prompt) : await callAnthropic(prompt);
+      raw = await callAI({ messages: [{ role: 'user', content: prompt }], maxTokens: 700 });
     } catch (e) {
       console.error('broad-suggestions AI error:', e);
       res.status(502).json({ ok: false, error: 'AI қызметі уақытша қолжетімсіз.' });

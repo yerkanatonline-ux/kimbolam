@@ -7,6 +7,7 @@
 
 const specialtiesKey = require('../data/specialties-key.json');
 const { applyCors, handlePreflight, rateLimit, tooManyRequests } = require('../lib/http');
+const { callAI } = require('../lib/ai');
 
 const SPEC_BY_CODE = {};
 specialtiesKey.forEach(s => { SPEC_BY_CODE[s.code] = s; });
@@ -75,31 +76,15 @@ module.exports = async function handler(req, res) {
 
     const system = buildSystemPrompt(profile);
 
-    const apiRes = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 700,
-        system,
-        messages: trimmed,
-      }),
-    });
-
-    if (!apiRes.ok) {
-      const errText = await apiRes.text();
-      console.error('Anthropic API error:', apiRes.status, errText);
+    let text;
+    try {
+      text = await callAI({ system, messages: trimmed, maxTokens: 700 });
+    } catch (e) {
+      console.error('Chat AI error:', e);
       res.status(502).json({ error: 'AI қызметі уақытша қолжетімсіз, кейінірек қайталап көріңіз.' });
       return;
     }
-
-    const data = await apiRes.json();
-    const textBlock = (data.content || []).find(b => b.type === 'text');
-    const reply = textBlock ? textBlock.text : 'Кешіріңіз, жауап құра алмадым, қайталап көріңізші.';
+    const reply = text || 'Кешіріңіз, жауап құра алмадым, қайталап көріңізші.';
 
     res.status(200).json({ reply });
   } catch (err) {
