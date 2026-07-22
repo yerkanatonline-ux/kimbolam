@@ -3,7 +3,7 @@
 // денесінен — коды публичті репоға салынбайды), (3) қай env бар екенін хабарлау (тек бар/жоқ).
 //
 // DB_DRIVER-ден тәуелсіз: migrate тікелей pg-мен, импорт тікелей supabase драйверімен.
-const { runMigration, seedPromoCodes } = require('../db/migrate');
+const { runMigration, seedPromoCodes, cleanupTestData } = require('../db/migrate');
 
 const TOKEN = 'setup-kb-2026-7f3a9c'; // уақытша, эндпойнтпен бірге жойылады
 
@@ -22,6 +22,17 @@ module.exports = async function handler(req, res) {
   };
 
   const out = { ok: true, env };
+
+  // Прод-тест із-қалдықтарын өшіру (body.cleanup === true болса).
+  if (req.body && req.body.cleanup === true) {
+    try {
+      out.cleanup = await cleanupTestData();
+    } catch (e) {
+      out.cleanup = { ok: false, error: String(e && e.message || e) };
+    }
+    res.status(200).json(out);
+    return;
+  }
 
   try {
     out.migrate = await runMigration();

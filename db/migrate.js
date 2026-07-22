@@ -97,4 +97,18 @@ async function seedPromoCodes(codes) {
   }
 }
 
-module.exports = { runMigration, seedPromoCodes, SCHEMA_SQL };
+// Прод-тестінің із-қалдықтарын өшіреді (тек нақты тест-белгілер бойынша, қауіпсіз).
+async function cleanupTestData() {
+  const client = makeClient();
+  await client.connect();
+  try {
+    const r1 = await client.query(`delete from test_results where student_name = 'ПРОД-ТЕСТ-ОКУШЫ'`);
+    const r2 = await client.query(`delete from classes where class_name = 'ПРОД-ТЕСТ-КЛАСС'`);
+    const r3 = await client.query(`delete from promo_codes where code = 'ZZ-PRODTEST'`);
+    return { results: r1.rowCount, classes: r2.rowCount, promo: r3.rowCount };
+  } finally {
+    await client.end();
+  }
+}
+
+module.exports = { runMigration, seedPromoCodes, cleanupTestData, SCHEMA_SQL };
