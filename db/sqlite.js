@@ -25,6 +25,8 @@ db.exec(`
     created_at text not null,
     student_name text not null,
     class_code text,
+    student_class text,
+    promo_code text,
     holland_code text,
     holland_scores text,
     klimov_top text,
@@ -34,7 +36,21 @@ db.exec(`
   );
   create index if not exists idx_test_results_class_code on test_results(class_code);
   create index if not exists idx_test_results_created_at on test_results(created_at);
+  create table if not exists promo_codes (
+    code text primary key,
+    used integer not null default 0,
+    used_by text,
+    used_at text
+  );
 `);
+
+// Бұрыннан бар test_results кестесіне жаңа бағандарды идемпотентті қосу
+// (SQLite-та ADD COLUMN IF NOT EXISTS сенімді емес, сондықтан pragma арқылы тексереміз).
+(function ensureColumns() {
+  const cols = db.prepare(`pragma table_info(test_results)`).all().map(c => c.name);
+  if (!cols.includes('student_class')) db.exec(`alter table test_results add column student_class text`);
+  if (!cols.includes('promo_code')) db.exec(`alter table test_results add column promo_code text`);
+})();
 
 function nowIso() { return new Date().toISOString(); }
 
@@ -77,16 +93,48 @@ async function insertTestResult(r) {
   const id = crypto.randomUUID();
   const createdAt = nowIso();
   db.prepare(`insert into test_results
-      (id, created_at, student_name, class_code, holland_code, holland_scores, klimov_top, mbti_type, confidence, matched_specialties)
-      values (?,?,?,?,?,?,?,?,?,?)`)
+      (id, created_at, student_name, class_code, student_class, promo_code, holland_code, holland_scores, klimov_top, mbti_type, confidence, matched_specialties)
+      values (?,?,?,?,?,?,?,?,?,?,?,?)`)
     .run(
-      id, createdAt, r.studentName, r.classCode || null, r.hollandCode || null,
+      id, createdAt, r.studentName, r.classCode || null, r.studentClass || null, r.promoCode || null,
+      r.hollandCode || null,
       r.hollandScores ? JSON.stringify(r.hollandScores) : null,
       r.klimovTop ? JSON.stringify(r.klimovTop) : null,
       r.mbtiType || null, r.confidence || null,
       r.matchedSpecialties ? JSON.stringify(r.matchedSpecialties) : null,
     );
   return { id, createdAt };
+}
+
+// --- Промокодтар (платный доступ) ---
+
+// Гейтте: код бар ма, әлі қолданылмаған ба? {valid, reason} қайтарады.
+async function checkPromoCode(code) {
+  const row = db.prepare(`select code, used from promo_codes where code = ?`).get(code);
+  if (!row) return { valid: false, reason: 'not_found' };
+  if (row.used) return { valid: false, reason: 'used' };
+  return { valid: true };
+}
+
+// save-result-те: кодты атомды түрде "қолданылды" деп белгілейміз (CAS).
+// SQLite — бір жазушы, сондықтан UPDATE ... WHERE used=0 атомды.
+// { consumed } қайтарады: true — біз енді ғана белгіледік, false — код жоқ/бұрын қолданылған.
+async function consumePromoCode(code, usedBy) {
+  const info = db.prepare(
+    `update promo_codes set used = 1, used_by = ?, used_at = ? where code = ? and used = 0`,
+  ).run(usedBy || null, nowIso(), code);
+  return { consumed: info.changes > 0 };
+}
+
+// Массовый импорт (import-promo-codes.js қолданады). Бар кодты аттап кетеді.
+async function importPromoCodes(codes) {
+  const stmt = db.prepare(`insert or ignore into promo_codes (code, used) values (?, 0)`);
+  const tx = db.transaction((list) => {
+    let added = 0;
+    for (const c of list) { if (stmt.run(c).changes > 0) added++; }
+    return added;
+  });
+  return { added: tx(codes) };
 }
 
 async function getResultsByClassCode(code) {
@@ -109,4 +157,5 @@ module.exports = {
   createClass, codeExists, teacherCodeExists,
   findClassByCode, findClassByTeacherCode,
   insertTestResult, getResultsByClassCode,
+  checkPromoCode, consumePromoCode, importPromoCodes,
 };

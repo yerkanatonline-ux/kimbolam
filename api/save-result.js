@@ -13,7 +13,7 @@ module.exports = async function handler(req, res) {
 
   try {
     const {
-      studentName, classCode,
+      studentName, classCode, studentClass, promoCode,
       hollandCode, hollandScores, klimovTop, mbtiType, confidence, matchedSpecialties,
     } = req.body || {};
 
@@ -29,13 +29,39 @@ module.exports = async function handler(req, res) {
       validClassCode = cls ? cls.code : null;
     }
 
+    const normalizedPromo = promoCode ? promoCode.trim().toUpperCase() : null;
+
+    // Нәтижені ӘРҚАШАН сақтаймыз — оқушының 15 минуттық жұмысы ешқашан жоғалмасын
+    // (plan-eng-review D2). Промокодты жою — бөлек, best-effort қадам.
     const saved = await db.insertTestResult({
       studentName: studentName.trim(),
       classCode: validClassCode,
+      studentClass: studentClass ? studentClass.trim() : null,
+      promoCode: normalizedPromo,
       hollandCode, hollandScores, klimovTop, mbtiType, confidence, matchedSpecialties,
     });
 
-    res.status(200).json({ id: saved.id, savedAt: saved.createdAt, linkedToClass: !!validClassCode });
+    // Промокодты атомды түрде "қолданылды" деп белгілейміз (CAS: used=false болғанда ғана).
+    // Егер код бұрыннан қолданылған болса (race/қайта жіберу) — нәтиже сақталды, тек лог жазамыз.
+    let promoConsumed = false;
+    if (normalizedPromo) {
+      try {
+        const r = await db.consumePromoCode(normalizedPromo, studentName.trim());
+        promoConsumed = r.consumed;
+        if (!promoConsumed) {
+          console.warn(`save-result: промокод ${normalizedPromo} бұрын қолданылған (нәтиже бәрібір сақталды, id=${saved.id})`);
+        }
+      } catch (e) {
+        console.error('save-result: промокодты жою қатесі:', e);
+      }
+    }
+
+    res.status(200).json({
+      id: saved.id,
+      savedAt: saved.createdAt,
+      linkedToClass: !!validClassCode,
+      promoConsumed,
+    });
   } catch (err) {
     console.error('save-result error:', err);
     res.status(500).json({ error: 'Ішкі қате болды.' });

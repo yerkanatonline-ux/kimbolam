@@ -15,6 +15,8 @@ const routes = {
   '/api/create-class': require('./api/create-class'),
   '/api/save-result': require('./api/save-result'),
   '/api/get-class-results': require('./api/get-class-results'),
+  '/api/check-code': require('./api/check-code'),
+  '/api/broad-suggestions': require('./api/broad-suggestions'),
 };
 
 Object.entries(routes).forEach(([path, handler]) => {

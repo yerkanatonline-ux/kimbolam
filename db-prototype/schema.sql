@@ -18,7 +18,9 @@ create table if not exists test_results (
   created_at timestamptz default now(),
 
   student_name text not null,          -- аты-жөні (міндетті)
-  class_code text references classes(code),  -- бос болса = жеке тапсырған (сырттан)
+  class_code text references classes(code),  -- мұғалім берген класс коды (бос болса = жеке)
+  student_class text,                  -- еркін мәтін (мыс. '9 Ә') — болашақ аналитика үшін, әзірге UI-де жоқ
+  promo_code text,                     -- осы нәтиже қай промокодпен ашылғанын жазып қоямыз
 
   holland_code text,                   -- мыс. 'ISA'
   holland_scores jsonb,                -- {"R":4,"I":99,"A":75,"S":99,"E":50,"C":25}
@@ -26,6 +28,14 @@ create table if not exists test_results (
   mbti_type text,                      -- мыс. 'INFP'
   confidence text,                     -- 'Жоғары' | 'Орташа' | 'Ізденіс керек'
   matched_specialties jsonb            -- [{"code":"B041","n":"Психология","pct":98}, ...]
+);
+
+-- 3) Промокодтар кестесі — платный доступ (гейтте тексеріледі, save-result-те қолданылды деп белгіленеді)
+create table if not exists promo_codes (
+  code text primary key,               -- мыс. 'KB-A1B2C'
+  used boolean not null default false, -- бір рет қана қолданылады
+  used_by text,                        -- кім қолданды (оқушының аты)
+  used_at timestamptz
 );
 
 -- Іздеуді жылдамдату үшін индекстер
@@ -36,4 +46,5 @@ create index if not exists idx_test_results_created_at on test_results(created_a
 -- арқылы жазу/оқу рұқсат етіледі, браузерден тікелей қатынау жабық болады.
 alter table classes enable row level security;
 alter table test_results enable row level security;
+alter table promo_codes enable row level security;
 -- Ешбір policy қоспаймыз әдейі — демек тек service_role key арқылы (backend-те) қатынауға болады.

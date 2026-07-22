@@ -19,6 +19,8 @@ create table if not exists test_results (
   created_at timestamptz default now(),
   student_name text not null,
   class_code text references classes(code),
+  student_class text,
+  promo_code text,
   holland_code text,
   holland_scores jsonb,
   klimov_top jsonb,
@@ -28,8 +30,18 @@ create table if not exists test_results (
 );
 create index if not exists idx_test_results_class_code on test_results(class_code);
 create index if not exists idx_test_results_created_at on test_results(created_at);
+create table if not exists promo_codes (
+  code text primary key,
+  used boolean not null default false,
+  used_by text,
+  used_at timestamptz
+);
+-- Бұрыннан бар test_results болса, жаңа бағандарды идемпотентті қосу
+alter table test_results add column if not exists student_class text;
+alter table test_results add column if not exists promo_code text;
 alter table classes enable row level security;
 alter table test_results enable row level security;
+alter table promo_codes enable row level security;
 `;
 
 async function runMigration() {

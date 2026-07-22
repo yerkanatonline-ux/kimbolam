@@ -57,6 +57,8 @@ async function insertTestResult(r) {
     .insert({
       student_name: r.studentName,
       class_code: r.classCode || null,
+      student_class: r.studentClass || null,
+      promo_code: r.promoCode || null,
       holland_code: r.hollandCode || null,
       holland_scores: r.hollandScores || null,
       klimov_top: r.klimovTop || null,
@@ -68,6 +70,39 @@ async function insertTestResult(r) {
     .single();
   if (error) throw error;
   return { id: data.id, createdAt: data.created_at };
+}
+
+// --- Промокодтар (платный доступ) ---
+
+async function checkPromoCode(code) {
+  const { data } = await supabase
+    .from('promo_codes').select('code, used').eq('code', code).maybeSingle();
+  if (!data) return { valid: false, reason: 'not_found' };
+  if (data.used) return { valid: false, reason: 'used' };
+  return { valid: true };
+}
+
+// Атомды CAS: used=false болғанда ғана true-ге ауыстырады. Postgres UPDATE ...
+// WHERE used=false — жалғыз транзакция, race-те тек біреуі жеңеді.
+async function consumePromoCode(code, usedBy) {
+  const { data, error } = await supabase
+    .from('promo_codes')
+    .update({ used: true, used_by: usedBy || null, used_at: new Date().toISOString() })
+    .eq('code', code)
+    .eq('used', false)
+    .select('code');
+  if (error) throw error;
+  return { consumed: Array.isArray(data) && data.length > 0 };
+}
+
+async function importPromoCodes(codes) {
+  const rows = codes.map(c => ({ code: c, used: false }));
+  const { data, error } = await supabase
+    .from('promo_codes')
+    .upsert(rows, { onConflict: 'code', ignoreDuplicates: true })
+    .select('code');
+  if (error) throw error;
+  return { added: Array.isArray(data) ? data.length : 0 };
 }
 
 async function getResultsByClassCode(code) {
@@ -84,4 +119,5 @@ module.exports = {
   createClass, codeExists, teacherCodeExists,
   findClassByCode, findClassByTeacherCode,
   insertTestResult, getResultsByClassCode,
+  checkPromoCode, consumePromoCode, importPromoCodes,
 };

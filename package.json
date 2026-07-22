@@ -5,13 +5,17 @@
   "description": "«Кім болам?» AI кеңесшісі, эссе көмекшісі және дерекқор backend-і (Vercel serverless functions)",
   "scripts": {
     "local": "node --watch server.js",
-    "vercel-dev": "vercel dev"
+    "vercel-dev": "vercel dev",
+    "test": "node test/integration.js",
+    "import-codes": "node db/import-promo-codes.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.0",
-    "better-sqlite3": "^11.3.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "pg": "^8.13.1"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "^11.3.0"
   }
 }

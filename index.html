@@ -444,7 +444,8 @@ footer small{font-size:13px;font-weight:700}
     <!-- Каталог/Университеттер/Мұғалімге/Ата-анаға/Кіру/Тіркелу — MVP-де әдейі жасырылған,
          бетті тек тестке шоғырландыру үшін. Кодтары (#catalog, #unis, #teacher, #parent)
          файлда сол қалпында қалды, кейін қайта қосу үшін осы блокты қалпына келтіру жеткілікті. -->
-    <div class="nav-auth" style="margin-left:auto">
+    <div class="nav-auth" style="margin-left:auto;display:flex;align-items:center;gap:14px">
+      <a href="#" onclick="go('teacher');return false" style="font-weight:800;color:var(--muted);text-decoration:none;font-size:14px">Мұғалімге</a>
       <button class="cta" onclick="goGate()">Тестті бастау</button>
     </div>
   </div>
@@ -546,9 +547,9 @@ footer small{font-size:13px;font-weight:700}
         <div class="sec-label">Тестке кіру</div>
         <div class="q" style="font-size:22px;margin-bottom:24px">Алдымен өзің туралы жаз</div>
         <div style="display:flex;flex-direction:column;gap:14px">
-          <input id="gateClass" class="gate-input" type="text" placeholder="Сынып (мыс. 9 «Ә»)">
           <input id="gateName" class="gate-input" type="text" placeholder="Аты-жөнің">
           <input id="gateCode" class="gate-input" type="text" placeholder="Промокод" style="text-transform:uppercase">
+          <input id="gateClass" class="gate-input" type="text" placeholder="Сынып коды (мұғалім берген болса)" style="text-transform:uppercase">
           <div id="gateError" style="color:var(--pink-dk);font-weight:800;font-size:14px;display:none"></div>
           <button class="btn btn-gold" id="gateBtn" onclick="submitGate()" style="justify-content:center">Тестті бастау</button>
         </div>
@@ -740,22 +741,41 @@ footer small{font-size:13px;font-weight:700}
 <main id="teacher" class="hidden">
   <section class="block">
     <div class="wrap">
-      <div class="kicker">Мұғалім кабинеті · демо</div>
-      <h2 class="title">9 «Ә» сыныбы</h2>
-      <p class="sub">Сынып бойынша тест нәтижелері. Қай оқушыға жеке кеңес керегін бір қарағанда көресіз.</p>
-      <div class="stat-row">
-        <div class="stat"><div class="n">28</div><div class="l">оқушы тіркелген</div></div>
-        <div class="stat"><div class="n g">24</div><div class="l">тестті аяқтады</div></div>
-        <div class="stat"><div class="n">Кәсіпкер</div><div class="l">басым бағыт</div></div>
-        <div class="stat"><div class="n g">6</div><div class="l">кеңес қажет</div></div>
+      <div class="kicker">Мұғалім кабинеті</div>
+      <h2 class="title">Сынып нәтижелері</h2>
+      <p class="sub">Сынып жасаңыз, оқушыларға сынып кодын беріңіз — олар тестті тапсырғанда нәтижелер осында автоматты жиналады. Нәтижелерді тек сіздегі құпия мұғалім коды ашады.</p>
+
+      <!-- 1. Класс жасау -->
+      <div class="panel" style="max-width:560px;margin-bottom:24px">
+        <div class="sec-label">1. Жаңа сынып жасау</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <input id="tcSchool" class="gate-input" type="text" placeholder="Мектеп атауы (міндетті емес)">
+          <input id="tcClass" class="gate-input" type="text" placeholder="Сынып атауы (мыс. 9 «Ә»)">
+          <div id="tcError" style="color:var(--pink-dk);font-weight:800;font-size:14px;display:none"></div>
+          <button class="btn btn-gold" id="tcBtn" onclick="createClass()" style="justify-content:center">Сынып жасау</button>
+        </div>
+        <div id="tcResult" style="display:none;margin-top:18px"></div>
       </div>
-      <table>
-        <thead><tr><th>Оқушы</th><th>Тұлға типі</th><th>Топ мамандық</th><th>Күй</th></tr></thead>
-        <tbody id="teacherRows"></tbody>
-      </table>
-      <div class="note">
-        <span>ℹ️</span>
-        <div><b>Демо деректер.</b> Нақты нұсқада мұғалім класс кодын береді, оқушылар тіркеледі, ал нәтижелер осында автоматты түрде жиналады.</div>
+
+      <!-- 2. Нәтижелерді көру -->
+      <div class="panel" style="max-width:560px;margin-bottom:24px">
+        <div class="sec-label">2. Нәтижелерді көру</div>
+        <div style="display:flex;flex-direction:column;gap:12px;margin-top:12px">
+          <input id="trCode" class="gate-input" type="text" placeholder="Мұғалім коды (T-XXXX-XXXX)" style="text-transform:uppercase">
+          <div id="trError" style="color:var(--pink-dk);font-weight:800;font-size:14px;display:none"></div>
+          <button class="btn btn-gold" id="trBtn" onclick="loadClassResults()" style="justify-content:center">Нәтижелерді көрсету</button>
+        </div>
+      </div>
+
+      <div id="trBox" style="display:none">
+        <h3 class="title" id="trTitle" style="font-size:22px"></h3>
+        <div class="stat-row">
+          <div class="stat"><div class="n" id="trCount">0</div><div class="l">тест тапсырды</div></div>
+        </div>
+        <table>
+          <thead><tr><th>Оқушы</th><th>Holland</th><th>Тип</th><th>Сенім</th><th>Топ мамандық</th></tr></thead>
+          <tbody id="teacherRows"></tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -825,18 +845,15 @@ const API_BASE = (location.hostname === 'localhost' || location.hostname === '12
   : '';
 const AI_API_URL = API_BASE + '/api/chat';
 const SAVE_RESULT_URL = API_BASE + '/api/save-result';
-
-/* ---------- GOOGLE SHEETS (жедел іске қосу, Vercel/Supabase-сіз) ----------
-   google-sheets-integration/README.md бойынша Apps Script деплой етіп,
-   осында нақты Web app URL-ды қойыңыз. */
-const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxhwyPe1ZUP7m5qrrO52CbVJonWXdQ1xGnO4QtU8vOHSgiqdjWrwcwFt5LTpx2zAb2W/exec';
+const CHECK_CODE_URL = API_BASE + '/api/check-code';
+const BROAD_URL = API_BASE + '/api/broad-suggestions';
 
 let aiProfile = null;      // соңғы есептелген профиль (showResults() толтырады)
 let aiMessages = [];       // {role:'user'|'assistant', content}
 let aiBusy = false;
 
-let resultPayload = null;     // showResults() толтырады — Google Sheets-ке жіберілетін дерек
-let gateProfile = null;       // {className, studentName, promoCode} — submitGate() толтырады
+let resultPayload = null;     // showResults() толтырады — /api/save-result-ке жіберілетін дерек
+let gateProfile = null;       // {studentName, promoCode, classCode} — submitGate() толтырады
 let savedThisSession = false; // бір тест нәтижесі бір рет қана сақталады
 
 function goGate(){
@@ -845,14 +862,14 @@ function goGate(){
 }
 
 async function submitGate(){
-  const className = (document.getElementById('gateClass').value||'').trim();
+  const classCode = (document.getElementById('gateClass').value||'').trim().toUpperCase();
   const studentName = (document.getElementById('gateName').value||'').trim();
   const promoCode = (document.getElementById('gateCode').value||'').trim().toUpperCase();
   const errEl = document.getElementById('gateError');
   errEl.style.display = 'none';
 
-  if(!className || !studentName || !promoCode){
-    errEl.textContent = 'Барлық өрісті толтыр.';
+  if(!studentName || !promoCode){
+    errEl.textContent = 'Аты-жөнің мен промокодты толтыр.';
     errEl.style.display = 'block';
     return;
   }
@@ -861,7 +878,11 @@ async function submitGate(){
   btn.disabled = true; btn.textContent = 'Тексерілуде...';
 
   try{
-    const res = await fetch(SHEETS_WEBAPP_URL + '?action=checkCode&code=' + encodeURIComponent(promoCode));
+    const res = await fetch(CHECK_CODE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: promoCode })
+    });
     const data = await res.json();
     if(!data.valid){
       errEl.textContent = data.reason === 'used' ? 'Бұл промокод бұрын қолданылған.' : 'Промокод дұрыс емес.';
@@ -876,22 +897,28 @@ async function submitGate(){
     return;
   }
 
-  gateProfile = { className, studentName, promoCode };
+  gateProfile = { studentName, promoCode, classCode: classCode || null };
   btn.disabled = false; btn.textContent = 'Тестті бастау';
   startTest();
 }
 
-async function submitToSheet(){
+async function saveResult(){
   if(savedThisSession || !resultPayload || !gateProfile) return;
   const statusEl = document.getElementById('saveStatus');
   statusEl.textContent = 'Сақталуда...';
   try{
-    const res = await fetch(SHEETS_WEBAPP_URL, {
+    const res = await fetch(SAVE_RESULT_URL, {
       method: 'POST',
-      body: JSON.stringify({ action: 'submitResult', ...gateProfile, ...resultPayload })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        studentName: gateProfile.studentName,
+        promoCode: gateProfile.promoCode,
+        classCode: gateProfile.classCode,
+        ...resultPayload
+      })
     });
     const data = await res.json();
-    if(data.ok){ savedThisSession = true; statusEl.textContent = '✓ Сақталды'; }
+    if(data.id){ savedThisSession = true; statusEl.textContent = '✓ Сақталды'; }
     else { statusEl.textContent = ''; }
   } catch(e){
     statusEl.textContent = '';
@@ -905,10 +932,10 @@ async function loadBroadSuggestions(){
   btn.disabled = true; btn.textContent = 'Жүктелуде...';
   box.innerHTML = '';
   try{
-    const res = await fetch(SHEETS_WEBAPP_URL, {
+    const res = await fetch(BROAD_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        action: 'suggestBroad',
         hollandCode: resultPayload.hollandCode,
         klimovTop: resultPayload.klimovTop,
         mbtiType: resultPayload.mbtiType,
@@ -1751,7 +1778,7 @@ function showResults(){
   document.getElementById('aiBody').innerHTML = '';
   document.getElementById('aiFab').classList.remove('hidden-fab');
 
-  /* ===== Google Sheets-ке жіберілетін дерек ===== */
+  /* ===== /api/save-result-ке жіберілетін дерек ===== */
   resultPayload = {
     hollandCode: code,
     hollandScores: disp,
@@ -1766,7 +1793,7 @@ function showResults(){
   setName();
 
   go('results');
-  submitToSheet();
+  saveResult();
 }
 
 function setName(){
@@ -1827,32 +1854,72 @@ function renderUnis(){
   });
 }
 
-/* ---------- TEACHER DEMO ---------- */
-const CLASS=[
-  ['Аружан С.','Көмекші · Аналитик','Психолог','done'],
-  ['Дамир Қ.','Практик · Ұйымдастырушы','IT-инженер','done'],
-  ['Ерасыл М.','Көшбасшы · Ұйымдастырушы','Кәсіпкер','done'],
-  ['Аяулым Т.','Креатор · Аналитик','Дизайнер','done'],
-  ['Нұрислам Б.','Аналитик · Практик','Ғалым-зерттеуші','done'],
-  ['Мадина Ж.','Көмекші · Креатор','Мұғалім','need'],
-  ['Санжар О.','Практик · Аналитик','Инженер','done'],
-  ['Аружан Д.','Аналитик · Көмекші','Дәрігер','need']
-];
-function renderTeacher(){
-  const tb=document.getElementById('teacherRows');
-  tb.innerHTML='';
-  CLASS.forEach(r=>{
-    const tr=document.createElement('tr');
-    const status = r[3]==='need'
-      ? '<span class="pill" style="background:rgba(233,168,58,.16);color:var(--gold-deep)">Кеңес қажет</span>'
-      : '<span class="pill" style="background:rgba(62,156,107,.13);color:var(--ok)">Аяқтады</span>';
-    tr.innerHTML='<td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+status+'</td>';
-    tb.appendChild(tr);
-  });
+/* ---------- TEACHER (нақты БД) ---------- */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function createClass(){
+  const schoolName = (document.getElementById('tcSchool').value||'').trim();
+  const className = (document.getElementById('tcClass').value||'').trim();
+  const errEl = document.getElementById('tcError');
+  const resEl = document.getElementById('tcResult');
+  errEl.style.display='none';
+  if(!className){ errEl.textContent='Сынып атауын жаз.'; errEl.style.display='block'; return; }
+  const btn=document.getElementById('tcBtn');
+  btn.disabled=true; btn.textContent='Жасалуда...';
+  try{
+    const res=await fetch(API_BASE+'/api/create-class',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ schoolName, className })
+    });
+    const d=await res.json();
+    if(!d.code){ errEl.textContent=d.error||'Қате болды.'; errEl.style.display='block'; }
+    else{
+      resEl.innerHTML =
+        '<div class="note" style="flex-direction:column;align-items:flex-start;gap:8px">'+
+        '<div><b>Сынып: '+esc(d.className)+'</b>'+(d.schoolName?' · '+esc(d.schoolName):'')+'</div>'+
+        '<div>Оқушыларға беретін <b>сынып коды</b>: <span style="font-family:monospace;font-size:18px">'+esc(d.code)+'</span></div>'+
+        '<div>Тек сіздегі <b>мұғалім коды</b> (нәтижелерді ашады, оқушыларға бермеңіз): <span style="font-family:monospace;font-size:18px">'+esc(d.teacherCode)+'</span></div>'+
+        '<div style="color:var(--pink-dk);font-weight:800">⚠️ Мұғалім кодын сақтап қойыңыз — ол қайта көрсетілмейді.</div>'+
+        '</div>';
+      resEl.style.display='block';
+    }
+  }catch(e){ errEl.textContent='Байланыс қатесі.'; errEl.style.display='block'; }
+  btn.disabled=false; btn.textContent='Сынып жасау';
+}
+
+async function loadClassResults(){
+  const teacherCode = (document.getElementById('trCode').value||'').trim().toUpperCase();
+  const errEl = document.getElementById('trError');
+  const box = document.getElementById('trBox');
+  errEl.style.display='none';
+  if(!teacherCode){ errEl.textContent='Мұғалім кодын жаз.'; errEl.style.display='block'; return; }
+  const btn=document.getElementById('trBtn');
+  btn.disabled=true; btn.textContent='Жүктелуде...';
+  try{
+    const res=await fetch(API_BASE+'/api/get-class-results',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ teacherCode })
+    });
+    const d=await res.json();
+    if(!res.ok){ errEl.textContent = res.status===404 ? 'Мұндай мұғалім коды табылмады.' : (d.error||'Қате болды.'); errEl.style.display='block'; box.style.display='none'; }
+    else{
+      document.getElementById('trTitle').textContent = d.class.className + (d.class.schoolName ? ' · '+d.class.schoolName : '');
+      document.getElementById('trCount').textContent = d.results.length;
+      const tb=document.getElementById('teacherRows'); tb.innerHTML='';
+      d.results.forEach(r=>{
+        const top = (r.matched_specialties&&r.matched_specialties[0]) ? r.matched_specialties[0].n : '—';
+        const tr=document.createElement('tr');
+        tr.innerHTML='<td><b>'+esc(r.student_name)+'</b></td><td>'+esc(r.holland_code||'—')+'</td><td>'+esc(r.mbti_type||'—')+'</td><td>'+esc(r.confidence||'—')+'</td><td>'+esc(top)+'</td>';
+        tb.appendChild(tr);
+      });
+      box.style.display='block';
+    }
+  }catch(e){ errEl.textContent='Байланыс қатесі.'; errEl.style.display='block'; }
+  btn.disabled=false; btn.textContent='Нәтижелерді көрсету';
 }
 
 /* ---------- INIT ---------- */
-renderFilters(); renderCatalog(); renderUnis(); renderTeacher();
+renderFilters(); renderCatalog(); renderUnis();
 go('home');
 </script>
 </body>

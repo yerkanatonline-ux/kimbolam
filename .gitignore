@@ -7,10 +7,21 @@ backend/.env
 .env.local
 
 # Локал SQLite деректер базасы (әр адамда өз локал көшірмесі болады)
+data/*.db
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
 backend/data/*.db
 backend/data/*.db-journal
 backend/data/*.db-wal
 backend/data/*.db-shm
+
+# Vercel CLI линк
+.vercel
+
+# Промокодтар — ТӨЛЕМДІ қатынау токендері, публичті репоға САЛМА
+db/promo-codes.json
+db/promo-codes.csv
 
 .DS_Store
 *.log
