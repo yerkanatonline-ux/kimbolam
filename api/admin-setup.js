@@ -3,8 +3,7 @@
 // денесінен — коды публичті репоға салынбайды), (3) қай env бар екенін хабарлау (тек бар/жоқ).
 //
 // DB_DRIVER-ден тәуелсіз: migrate тікелей pg-мен, импорт тікелей supabase драйверімен.
-const { runMigration } = require('../db/migrate');
-const supabase = require('../db/supabase');
+const { runMigration, seedPromoCodes } = require('../db/migrate');
 
 const TOKEN = 'setup-kb-2026-7f3a9c'; // уақытша, эндпойнтпен бірге жойылады
 
@@ -31,11 +30,11 @@ module.exports = async function handler(req, res) {
   }
 
   // Промокодтар тек сұраныс денесінен (body.codes = ["KB-....", ...]) — репода жоқ.
+  // Тікелей pg арқылы жүктейміз (PostgREST кэшіне тәуелсіз).
   const codes = (req.body && Array.isArray(req.body.codes)) ? req.body.codes : null;
   if (codes && codes.length) {
     try {
-      out.import = await supabase.importPromoCodes(codes);
-      out.import.received = codes.length;
+      out.import = await seedPromoCodes(codes);
     } catch (e) {
       out.import = { ok: false, error: String(e && e.message || e) };
     }

@@ -44,7 +44,7 @@ alter table test_results enable row level security;
 alter table promo_codes enable row level security;
 `;
 
-async function runMigration() {
+function makeClient() {
   const raw =
     process.env.POSTGRES_URL_NON_POOLING || process.env.POSTGRES_URL;
   if (!raw) {
@@ -54,16 +54,20 @@ async function runMigration() {
   // біздің ssl объектімізді (rejectUnauthorized:false) елемей, Supabase-тың
   // self-signed сертификатына сүрінеді.
   const connectionString = raw.replace(/([?&])sslmode=[^&]+(&|$)/, '$1').replace(/[?&]$/, '');
-  const client = new Client({
-    connectionString,
-    ssl: { rejectUnauthorized: false },
-  });
+  return new Client({ connectionString, ssl: { rejectUnauthorized: false } });
+}
+
+async function runMigration() {
+  const client = makeClient();
   await client.connect();
   try {
     await client.query(SCHEMA_SQL);
+    // PostgREST (supabase-js) жаңа кестені бірден көрмейді — схема кэшін қайта оқытамыз,
+    // әйтпесе рантайм endpoint-тері 'table not in schema cache' қатесін береді.
+    try { await client.query(`notify pgrst, 'reload schema'`); } catch {}
     const { rows } = await client.query(
       `select table_name from information_schema.tables
-       where table_schema = 'public' and table_name in ('classes','test_results')
+       where table_schema = 'public' and table_name in ('classes','test_results','promo_codes')
        order by table_name`,
     );
     return { ok: true, tables: rows.map(r => r.table_name) };
@@ -72,4 +76,25 @@ async function runMigration() {
   }
 }
 
-module.exports = { runMigration, SCHEMA_SQL };
+// Промокодтарды ТІКЕЛЕЙ pg арқылы жүктейді (PostgREST кэшіне тәуелсіз).
+// unnest арқылы бір сұраныспен, бар кодты аттап кетеді (ON CONFLICT DO NOTHING).
+async function seedPromoCodes(codes) {
+  if (!Array.isArray(codes) || !codes.length) return { added: 0, received: 0 };
+  const client = makeClient();
+  await client.connect();
+  try {
+    const before = await client.query(`select count(*)::int as n from promo_codes`);
+    await client.query(
+      `insert into promo_codes (code)
+       select unnest($1::text[])
+       on conflict (code) do nothing`,
+      [codes],
+    );
+    const after = await client.query(`select count(*)::int as n from promo_codes`);
+    return { received: codes.length, added: after.rows[0].n - before.rows[0].n, total: after.rows[0].n };
+  } finally {
+    await client.end();
+  }
+}
+
+module.exports = { runMigration, seedPromoCodes, SCHEMA_SQL };
